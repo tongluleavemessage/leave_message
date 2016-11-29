@@ -1,0 +1,14 @@
+com\tonglukuaijian\commerce\service\impl\RoleServiceImpl.class
+com\tonglukuaijian\commerce\service\impl\DepartmentServiceImpl.class
+com\tonglukuaijian\commerce\service\impl\UserServiceImpl.class
+com\tonglukuaijian\commerce\service\DepartmentService.class
+com\tonglukuaijian\commerce\exception\ServiceException.class
+com\tonglukuaijian\commerce\vo\UserVo.class
+com\tonglukuaijian\commerce\service\UserService.class
+com\tonglukuaijian\commerce\service\LeaveMessageService.class
+com\tonglukuaijian\commerce\vo\DepartmentVo.class
+com\tonglukuaijian\commerce\service\impl\LeaveMessageServiceImpl.class
+com\tonglukuaijian\commerce\service\RoleService.class
+com\tonglukuaijian\commerce\enums\LeaveMessageStatus.class
+com\tonglukuaijian\commerce\vo\RoleVo.class
+com\tonglukuaijian\commerce\vo\LeaveMessageVo.class

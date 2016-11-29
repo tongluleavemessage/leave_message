@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd     
+        http://cxf.apache.org/jaxrs  http://cxf.apache.org/schemas/jaxrs.xsd">
+	<bean class="org.apache.cxf.jaxrs.JAXRSServerFactoryBean"
+		init-method="create">
+		<property name="address" value="/" />
+		<property name="serviceBeans">
+			<list>
+				<bean class="com.tonglukuaijian.commerce.api.LeaveMessageWebService" />
+				<bean class="com.tonglukuaijian.commerce.api.UserWebService" />
+				<bean class="com.tonglukuaijian.commerce.api.RoleWebService" />
+				<bean class="com.tonglukuaijian.commerce.api.ProjectWebService" />
+				<bean class="com.tonglukuaijian.commerce.api.DepartmentWebService" />
+				<bean class="com.tonglukuaijian.commerce.api.ProjectUserWebService" />
+			</list>
+		</property>
+		<property name="providers">
+			<list>
+				<bean class="com.tonglukuaijian.commerce.provider.JsonMessageProcessor" />
+				<bean class="com.tonglukuaijian.commerce.provider.CustomExceptionMapper" />
+			</list>
+		</property>
+		<property name="inInterceptors">
+			<list>
+				<bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+				<bean
+					class="org.apache.cxf.jaxrs.validation.JAXRSBeanValidationInInterceptor" />
+			</list>
+		</property>
+		<property name="outInterceptors">
+			<list>
+				<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+			</list>
+		</property>
+	</bean>
+</beans>
+
