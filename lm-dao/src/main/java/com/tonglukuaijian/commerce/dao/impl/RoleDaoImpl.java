@@ -29,9 +29,18 @@ public class RoleDaoImpl implements RoleDao {
 	}
 
 	@Override
-	public List<Role> findAll() {
-		List<Role> list = jdbcTemplate.query("select * from T_ROLE", new RoleMapper());
+	public List<Role> findAll(int page, int size) {
+		String sql = "select * from T_ROLE order by ID desc";
+		if (page > 0 && size > 0) {
+			sql += "limit " + (page * size) + " , " + size;
+		}
+		List<Role> list = jdbcTemplate.query(sql, new RoleMapper());
 		return list;
+	}
+
+	@Override
+	public Role findById(Long id) {
+		return jdbcTemplate.queryForObject("select * from T_ROLE where ID=" + id, new RoleMapper());
 	}
 
 }

@@ -32,12 +32,11 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 		}
 		projectUserDao.delete(id);
 	}
-	
-	@Override
-	public List<ProjectUserDto> getUser(String projectId) {
-		return projectUserDao.findByParams(projectId);
-	}
 
+	@Override
+	public List<ProjectUserDto> getUser(String projectId, int page, int size) {
+		return projectUserDao.findByParams(projectId, page, size);
+	}
 
 	private ProjectUser wrapProjectUser(ProjectUserVo vo) {
 		ProjectUser po = new ProjectUser();
@@ -48,5 +47,4 @@ public class ProjectUserServiceImpl implements ProjectUserService {
 		return po;
 	}
 
-	
 }

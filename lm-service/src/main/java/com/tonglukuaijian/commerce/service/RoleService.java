@@ -19,10 +19,11 @@ public interface RoleService {
 	 * @param vo
 	 */
 	public void update(RoleVo vo);
-	
+
 	/**
 	 * 查询所有
+	 * 
 	 * @return
 	 */
-	public List<Role> getAll();
+	public List<Role> getAll(int page, int size);
 }

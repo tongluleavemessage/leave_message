@@ -25,5 +25,5 @@ public interface ProjectUserService {
 	 * 
 	 * @return
 	 */
-	public List<ProjectUserDto> getUser(String projectId);
+	public List<ProjectUserDto> getUser(String projectId, int page, int size);
 }

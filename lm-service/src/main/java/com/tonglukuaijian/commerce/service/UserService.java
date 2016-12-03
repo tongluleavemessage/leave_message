@@ -37,6 +37,14 @@ public interface UserService {
 	 * @param roleId
 	 * @return
 	 */
-	public List<User> getUserByParams(String accountNumber, String name, Long departmentId, Long roleId, int page,
-			int size);
+	public List<User> getUserByParams(String accountNumber, String name, Long departmentId, Long roleId,
+			String phoneNum, int page, int size);
+
+	/**
+	 * 通过ID 获取用户详情
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	User getUserInfo(Long userId);
 }

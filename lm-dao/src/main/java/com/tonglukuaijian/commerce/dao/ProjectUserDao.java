@@ -21,6 +21,6 @@ public interface ProjectUserDao {
 	 * 
 	 * @return
 	 */
-	public List<ProjectUserDto> findByParams(String projectId);
+	public List<ProjectUserDto> findByParams(String projectId, int page, int size);
 
 }

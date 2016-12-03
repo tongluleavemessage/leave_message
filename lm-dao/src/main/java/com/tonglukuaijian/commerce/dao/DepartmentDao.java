@@ -3,11 +3,11 @@ package com.tonglukuaijian.commerce.dao;
 import java.util.List;
 
 import com.tonglukuaijian.commerce.bean.Department;
+
 /**
  * 部门
  *
- * @author Lhy
- * 2016年11月22日下午2:17:50
+ * @author Lhy 2016年11月22日下午2:17:50
  */
 public interface DepartmentDao {
 	/**
@@ -23,10 +23,11 @@ public interface DepartmentDao {
 	 * @param department
 	 */
 	public void update(Department department);
-	
+
 	/**
 	 * 根据条件查询
+	 * 
 	 * @return
 	 */
-	public List<Department> findAll();
+	public List<Department> findAll(int page, int size);
 }

@@ -5,18 +5,20 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tonglukuaijian.commerce.GetParams;
 import com.tonglukuaijian.commerce.bean.User;
-import com.tonglukuaijian.commerce.enums.UserUsingEnum;
 import com.tonglukuaijian.commerce.service.UserService;
 import com.tonglukuaijian.commerce.vo.UserVo;
 
@@ -46,11 +48,13 @@ public class UserWebService {
 
 	@Path("/login")
 	@POST
-	public Map<String, Object> login(@Context HttpServletRequest request) {
+	public Map<String, Object> login(@Context HttpServletRequest request, @Context HttpSession session) {
+
 		String accountNumber = request.getParameter("accountNumber");
 		String password = request.getParameter("password");
 		Map<String, Object> map = new HashMap<String, Object>();
 		User user = userService.login(accountNumber, password);
+		session.setAttribute("userId", user.getId());
 		map.put("data", user);
 		return map;
 	}
@@ -61,15 +65,9 @@ public class UserWebService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String accountNumber = request.getParameter("accountNumber");
 		String name = request.getParameter("name");
-		int page = 1;
-		int size = 10;
-		if (null != request.getParameter("page")) {
-			page = Integer.parseInt(request.getParameter("page"));
-		}
-		if (null != request.getParameter("size")) {
-			size = Integer.parseInt(request.getParameter("size"));
-		}
+		Map<String, Integer> pageMap = GetParams.getPage(request);
 		Long departmentId = null;
+		String phoneNum = request.getParameter("phoneNum");
 		if (null != request.getParameter("departmentId")) {
 			departmentId = Long.parseLong(request.getParameter("departmentId"));
 		}
@@ -78,8 +76,19 @@ public class UserWebService {
 			roleId = Long.parseLong(request.getParameter("roleId"));
 		}
 
-		List<User> list = userService.getUserByParams(accountNumber, name, departmentId, roleId, page, size);
+		List<User> list = userService.getUserByParams(accountNumber, name, departmentId, roleId, phoneNum,
+				pageMap.get("page"), pageMap.get("size"));
 		map.put("data", list);
 		return map;
 	}
+
+	@Path("/info")
+	@GET
+	public Map<String, Object> getUserInfo(@QueryParam("userId") Long userId) {
+		User user = userService.getUserInfo(userId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("data", user);
+		return map;
+	}
+
 }

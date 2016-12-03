@@ -31,10 +31,6 @@ public class LeaveMessage {
 	 * 创建时间
 	 */
 	private Date createdTime;
-	/**
-	 * 回访时间
-	 */
-	private Date returnTime;
 
 	/**
 	 * 修改时间
@@ -44,12 +40,12 @@ public class LeaveMessage {
 	/**
 	 * 留言负责人
 	 */
-	private User principal;
+	private Long principal;
 
 	/**
-	 * 备注
+	 * 留言属于者
 	 */
-	private String remark;
+	private Long belongToUserId;
 
 	public Long getId() {
 		return id;
@@ -115,14 +111,6 @@ public class LeaveMessage {
 		this.createdTime = createdTime;
 	}
 
-	public Date getReturnTime() {
-		return returnTime;
-	}
-
-	public void setReturnTime(Date returnTime) {
-		this.returnTime = returnTime;
-	}
-
 	public Date getModifyTime() {
 		return modifyTime;
 	}
@@ -131,20 +119,20 @@ public class LeaveMessage {
 		this.modifyTime = modifyTime;
 	}
 
-	public User getPrincipal() {
+	public Long getPrincipal() {
 		return principal;
 	}
 
-	public void setPrincipal(User principal) {
+	public void setPrincipal(Long principal) {
 		this.principal = principal;
 	}
 
-	public String getRemark() {
-		return remark;
+	public Long getBelongToUserId() {
+		return belongToUserId;
 	}
 
-	public void setRemark(String remark) {
-		this.remark = remark;
+	public void setBelongToUserId(Long belongToUserId) {
+		this.belongToUserId = belongToUserId;
 	}
 
 }

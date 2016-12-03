@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tonglukuaijian.commerce.GetParams;
 import com.tonglukuaijian.commerce.dto.ProjectUserDto;
 import com.tonglukuaijian.commerce.service.ProjectUserService;
 import com.tonglukuaijian.commerce.vo.ProjectUserVo;
@@ -52,8 +53,9 @@ public class ProjectUserWebService {
 	@GET
 	@Path("/get")
 	public Map<String, Object> getByProjectId(@Context HttpServletRequest request) {
-		String	projectId = request.getParameter("projectId");
-		List<ProjectUserDto> list = projectUserService.getUser(projectId);
+		String projectId = request.getParameter("projectId");
+		Map<String, Integer> pageMap = GetParams.getPage(request);
+		List<ProjectUserDto> list = projectUserService.getUser(projectId, pageMap.get("page"), pageMap.get("size"));
 		Map<String, Object> map = new HashMap<>();
 		map.put("data", list);
 		return map;

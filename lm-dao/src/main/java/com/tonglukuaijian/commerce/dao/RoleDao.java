@@ -3,11 +3,11 @@ package com.tonglukuaijian.commerce.dao;
 import java.util.List;
 
 import com.tonglukuaijian.commerce.bean.Role;
+
 /**
  * 角色
  *
- * @author Lhy
- * 2016年11月22日下午2:17:56
+ * @author Lhy 2016年11月22日下午2:17:56
  */
 public interface RoleDao {
 	/**
@@ -23,12 +23,20 @@ public interface RoleDao {
 	 * @param role
 	 */
 	public void update(Role role);
-	
+
 	/**
 	 * 查询所有
+	 * 
 	 * @return
 	 */
-	public List<Role> findAll();
-	
-	
+	public List<Role> findAll(int page, int size);
+
+	/**
+	 * 查看
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Role findById(Long id);
+
 }

@@ -11,6 +11,9 @@
 				<bean class="com.tonglukuaijian.commerce.api.LeaveMessageWebService" />
 				<bean class="com.tonglukuaijian.commerce.api.UserWebService" />
 				<bean class="com.tonglukuaijian.commerce.api.RoleWebService" />
+				<bean class="com.tonglukuaijian.commerce.api.ProjectWebService" />
+				<bean class="com.tonglukuaijian.commerce.api.DepartmentWebService" />
+				<bean class="com.tonglukuaijian.commerce.api.ProjectUserWebService" />
 			</list>
 		</property>
 		<property name="providers">

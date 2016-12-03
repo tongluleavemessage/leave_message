@@ -23,14 +23,39 @@ public interface ProjectDao {
 	/**
 	 * 根据条件查询
 	 * 
-	 * @param departmentId
-	 * @param projectId
-	 * @param projectName
-	 * @param accountNumber
-	 * @param name
+	 * @param departmentId 部门ID
+	 * @param projectId 项目ID
+	 * @param projectName 项目名称 
+	 * @param accountNumber 账号
+	 * @param name 
 	 * @param phoneNum
 	 * @return
 	 */
 	public List<ProjectDto> findByParams(Long departmentId, String projectId, String projectName, String accountNumber,
-			String name, String phoneNum);
+			String name, String phoneNum, int page, int size);
+
+	/**
+	 * 获取项目负责人
+	 * 
+	 * @return
+	 */
+	public Project findProjectPrincipals(String projectId);
+
+	/**
+	 * 通过用户查询项目
+	 * 
+	 * @param departmentId
+	 *            部门ID
+	 * @param ministerId
+	 *            部长ID
+	 * @param groupId
+	 *            群总ID
+	 * @param principalId
+	 *            负责人ID
+	 * @param page
+	 * @param size
+	 * @return
+	 */
+	List<Project> findProjectByUserRelation(Long departmentId, Long ministerId, Long groupId, Long principalId,
+			int page, int size);
 }

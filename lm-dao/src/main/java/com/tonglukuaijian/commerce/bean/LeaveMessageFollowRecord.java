@@ -11,18 +11,22 @@ public class LeaveMessageFollowRecord {
 	private Long id;
 
 	/**
-	 * 留言跟进操作员
+	 * 留言跟进操作员ID
 	 */
 	private Long operatorUserId;
+	/**
+	 * 留言跟进操作员
+	 */
+	private String operatorUserName;
 	/**
 	 * 留言
 	 */
 	private Long leaveMessageId;
 
 	/**
-	 * 操作时间
+	 * 回访时间
 	 */
-	private Date modifyTime;
+	private Date returnTime;
 
 	/**
 	 * 状态
@@ -33,6 +37,11 @@ public class LeaveMessageFollowRecord {
 	 * 备注
 	 */
 	private String remark;
+
+	/**
+	 * 创建时间
+	 */
+	private Date createdTime;
 
 	public Long getId() {
 		return id;
@@ -49,6 +58,16 @@ public class LeaveMessageFollowRecord {
 	public void setOperatorUserId(Long operatorUserId) {
 		this.operatorUserId = operatorUserId;
 	}
+	
+	
+
+	public String getOperatorUserName() {
+		return operatorUserName;
+	}
+
+	public void setOperatorUserName(String operatorUserName) {
+		this.operatorUserName = operatorUserName;
+	}
 
 	public Long getLeaveMessageId() {
 		return leaveMessageId;
@@ -58,12 +77,12 @@ public class LeaveMessageFollowRecord {
 		this.leaveMessageId = leaveMessageId;
 	}
 
-	public Date getModifyTime() {
-		return modifyTime;
+	public Date getReturnTime() {
+		return returnTime;
 	}
 
-	public void setModifyTime(Date modifyTime) {
-		this.modifyTime = modifyTime;
+	public void setReturnTime(Date returnTime) {
+		this.returnTime = returnTime;
 	}
 
 	public Integer getStatus() {
@@ -80,6 +99,14 @@ public class LeaveMessageFollowRecord {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
 	}
 
 }

@@ -29,10 +29,11 @@ public class ProjectUserDaoImpl implements ProjectUserDao {
 	}
 
 	@Override
-	public List<ProjectUserDto> findByParams(String projectId) {
-		List<ProjectUserDto> list = jdbcTemplate.query("select tp.ID,tu.ACCOUNT_NUMBER,tu.`NAME`,tu.PHONE_NUM from T_PROJECT_USER tp "
-				+ " LEFT JOIN T_USERS tu on tp.USER_ID=tu.ID where tp.PROJECT_ID=" + projectId,
-				new ProjectUserDtoMapper());
+	public List<ProjectUserDto> findByParams(String projectId, int page, int size) {
+		List<ProjectUserDto> list = jdbcTemplate
+				.query("select tp.ID,tu.ACCOUNT_NUMBER,tu.`NAME`,tu.PHONE_NUM from T_PROJECT_USER tp "
+						+ " LEFT JOIN T_USERS tu on tp.USER_ID=tu.ID where tp.PROJECT_ID=" + projectId + " limit "
+						+ (page - 1) + " ," + size, new ProjectUserDtoMapper());
 		return list;
 	}
 

@@ -20,22 +20,25 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public void add(RoleVo vo) {
+		if (vo == null || vo.getName() == null) {
+			throw new ServiceException("请输入角色名称");
+		}
 		Role role = wrapRole(vo);
 		roleDao.save(role);
 	}
 
 	@Override
 	public void update(RoleVo vo) {
-		if (null == vo.getId()) {
+		if (null == vo || null == vo.getId()) {
 			throw new ServiceException("未指定角色");
 		}
 		Role role = wrapRole(vo);
 		roleDao.update(role);
 	}
-	
+
 	@Override
-	public List<Role> getAll() {
- 		return roleDao.findAll();
+	public List<Role> getAll(int page, int size) {
+		return roleDao.findAll(page, size);
 	}
 
 	private Role wrapRole(RoleVo vo) {
@@ -47,7 +50,5 @@ public class RoleServiceImpl implements RoleService {
 		role.setId(vo.getId());
 		return role;
 	}
-
-	
 
 }

@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tonglukuaijian.commerce.bean.Project;
+import com.tonglukuaijian.commerce.bean.ProjectUser;
 import com.tonglukuaijian.commerce.dao.ProjectDao;
+import com.tonglukuaijian.commerce.dao.ProjectUserDao;
 import com.tonglukuaijian.commerce.dto.ProjectDto;
+import com.tonglukuaijian.commerce.dto.ProjectUserDto;
 import com.tonglukuaijian.commerce.exception.ServiceException;
 import com.tonglukuaijian.commerce.service.ProjectService;
 import com.tonglukuaijian.commerce.vo.ProjectVo;
@@ -18,6 +21,8 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Autowired
 	private ProjectDao projectDao;
+	@Autowired
+	private ProjectUserDao projectUserDao;
 
 	@Override
 	public void add(ProjectVo vo) {
@@ -26,6 +31,13 @@ public class ProjectServiceImpl implements ProjectService {
 		}
 		Project project = wrapProject(vo);
 		projectDao.save(project);
+		
+		// 添加项目用户
+		ProjectUser projectUser = new ProjectUser();
+		projectUser.setCreatedTime(new Date());
+		projectUser.setProjectId(vo.getProjectId());
+		projectUser.setUserId(vo.getPrincipalId());
+		projectUserDao.save(projectUser);
 	}
 
 	@Override
@@ -39,9 +51,9 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public List<ProjectDto> getByParam(Long departmentId, String projectId, String projectName, String accountNumber,
-			String name, String phoneNum) {
+			String name, String phoneNum, int page, int size) {
 		List<ProjectDto> list = projectDao.findByParams(departmentId, projectId, projectName, accountNumber, name,
-				phoneNum);
+				phoneNum, page, size);
 		return list;
 	}
 

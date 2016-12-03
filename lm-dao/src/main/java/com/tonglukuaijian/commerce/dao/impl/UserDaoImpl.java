@@ -37,7 +37,7 @@ public class UserDaoImpl implements UserDao {
 	public User findById(Long userId) {
 		String sql = "select * from T_USERS where ID=?";
 		Object[] params = new Object[] { userId };
-		User user = (User) jdbcTemplate.queryForObject(sql, params, new UserMapper());
+		User user = jdbcTemplate.queryForObject(sql, params, new UserMapper());
 		return user;
 	}
 
@@ -45,19 +45,22 @@ public class UserDaoImpl implements UserDao {
 	public User findByAccountNumberAndPassword(String accountNumber, String password) {
 		String sql = "select * from T_USERS where ACCOUNT_NUMBER=? AND PASSWORD=?";
 		Object[] params = new Object[] { accountNumber, password };
-		User user = (User) jdbcTemplate.queryForObject(sql, params, new UserMapper());
+		User user = jdbcTemplate.queryForObject(sql, params, new UserMapper());
 		return user;
 	}
 
 	@Override
-	public List<User> findByParams(String accountNumber, String name, Long departmentId, Long roleId, int page,
-			int size) {
+	public List<User> findByParams(String accountNumber, String name, Long departmentId, Long roleId, String phoneNum,
+			int page, int size) {
 		String sql = "select * from T_USERS where 1=1";
 		if (accountNumber != null) {
 			sql += " and ACCOUNT_NUMBER = " + accountNumber;
 		}
+		if (null != phoneNum) {
+			sql += " and PHONE_NUM like %" + phoneNum + "%";
+		}
 		if (name != null) {
-			sql += " and NAME =" + name;
+			sql += " and NAME like %" + name + "%";
 		}
 		if (departmentId != null) {
 			sql += " and DEPARTMENT_ID =" + departmentId;
@@ -65,9 +68,11 @@ public class UserDaoImpl implements UserDao {
 		if (roleId != null) {
 			sql += " and ROLE_ID =" + roleId;
 		}
-		sql += " limit " + (page - 1) + "," + size;
+		sql += " order by ID desc ";
+		if (page > 0 && size > 0) {
+			sql += " limit " + (page * size) + "," + size;
+		}
 		List<User> list = jdbcTemplate.query(sql, new UserMapper());
 		return list;
 	}
-
 }

@@ -1,7 +1,10 @@
-com\tonglukuaijian\commerce\api\LeaveMessageWebService.class
 com\tonglukuaijian\commerce\api\UserWebService.class
 com\tonglukuaijian\commerce\provider\CustomExceptionMapper.class
+com\tonglukuaijian\commerce\api\ProjectUserWebService.class
+com\tonglukuaijian\commerce\GetParams.class
+com\tonglukuaijian\commerce\api\LeaveMessageWebService.class
 com\tonglukuaijian\commerce\api\DepartmentWebService.class
 com\tonglukuaijian\commerce\provider\JsonMessageProcessor.class
+com\tonglukuaijian\commerce\api\ProjectWebService.class
 com\tonglukuaijian\commerce\ServiceException.class
 com\tonglukuaijian\commerce\api\RoleWebService.class

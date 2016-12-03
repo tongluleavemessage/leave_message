@@ -49,6 +49,6 @@ public interface UserDao {
 	 * @param roleId
 	 * @return
 	 */
-	public List<User> findByParams(String accountNumber, String name, Long departmentId, Long roleId, int page,
+	public List<User> findByParams(String accountNumber, String name, Long departmentId, Long roleId, String phoneNum,int page,
 			int size);
 }

@@ -63,9 +63,18 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getUserByParams(String accountNumber, String name, Long departmentId, Long roleId, int page,
-			int size) {
-		List<User> lists = userDao.findByParams(accountNumber, name, departmentId, roleId,page,size);
+	public User getUserInfo(Long userId) {
+		User user = userDao.findById(userId);
+		if (null == user) {
+			throw new ServiceException("用户不存在");
+		}
+		return user;
+	}
+
+	@Override
+	public List<User> getUserByParams(String accountNumber, String name, Long departmentId, Long roleId,
+			String phoneNum, int page, int size) {
+		List<User> lists = userDao.findByParams(accountNumber, name, departmentId, roleId, phoneNum, page, size);
 		return lists;
 	}
 

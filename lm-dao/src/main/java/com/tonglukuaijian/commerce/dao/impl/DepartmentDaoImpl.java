@@ -24,13 +24,16 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
 	@Override
 	public void update(Department department) {
-		jdbcTemplate.update("update T_DEPARTMENT NAME=?,STATUS=? where ID=?",
+		jdbcTemplate.update("update T_DEPARTMENT SET `NAME`=?,`STATUS`=? where ID=?",
 				new Object[] { department.getName(), department.getStatus(), department.getId() });
 	}
 
 	@Override
-	public List<Department> findAll() {
-		String sql = "select * from T_DEPARTMENT";
+	public List<Department> findAll(int page, int size) {
+		String sql = "select * from T_DEPARTMENT order by ID desc";
+		if (page > 0 && size > 0) {
+			sql += " limit " + (page - 1) + " , " + size;
+		}
 		List<Department> list = jdbcTemplate.query(sql, new DepartmentMapper());
 		return list;
 	}

@@ -4,15 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tonglukuaijian.commerce.GetParams;
 import com.tonglukuaijian.commerce.bean.Role;
 import com.tonglukuaijian.commerce.service.RoleService;
 import com.tonglukuaijian.commerce.vo.RoleVo;
@@ -44,9 +47,10 @@ public class RoleWebService {
 
 	@Path("/get_all")
 	@GET
-	public Map<String, Object> getAll() {
+	public Map<String, Object> getAll(@Context HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<Role> list = roleService.getAll();
+		Map<String, Integer> pageMap = GetParams.getPage(request);
+		List<Role> list = roleService.getAll(pageMap.get("page"), pageMap.get("size"));
 		map.put("data", list);
 		return map;
 	}

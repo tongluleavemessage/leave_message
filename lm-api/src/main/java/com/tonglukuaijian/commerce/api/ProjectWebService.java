@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tonglukuaijian.commerce.GetParams;
 import com.tonglukuaijian.commerce.dto.ProjectDto;
 import com.tonglukuaijian.commerce.service.ProjectService;
 import com.tonglukuaijian.commerce.vo.ProjectVo;
@@ -30,6 +31,7 @@ public class ProjectWebService {
 	public Map<String, Object> getByParam(@Context HttpServletRequest request) {
 		Map<String, Object> map = new HashMap<>();
 		Long departmentId = null;
+		Map<String, Integer> pageMap = GetParams.getPage(request);
 		if (null != request.getParameter("departmentId")) {
 			departmentId = Long.parseLong(request.getParameter("departmentId"));
 		}
@@ -39,7 +41,7 @@ public class ProjectWebService {
 		String name = request.getParameter("name");
 		String phoneNum = request.getParameter("phoneNum");
 		List<ProjectDto> list = projectService.getByParam(departmentId, projectId, projectName, accountNumber, name,
-				phoneNum);
+				phoneNum, pageMap.get("page"), pageMap.get("size"));
 		map.put("data", list);
 		return map;
 	}

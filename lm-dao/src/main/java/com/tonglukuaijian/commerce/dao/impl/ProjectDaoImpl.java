@@ -10,6 +10,7 @@ import com.tonglukuaijian.commerce.bean.Project;
 import com.tonglukuaijian.commerce.dao.ProjectDao;
 import com.tonglukuaijian.commerce.dto.ProjectDto;
 import com.tonglukuaijian.commerce.mapper.ProjectDtoMapper;
+import com.tonglukuaijian.commerce.mapper.ProjectMapper;
 
 @Repository
 public class ProjectDaoImpl implements ProjectDao {
@@ -36,7 +37,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	public List<ProjectDto> findByParams(Long departmentId, String projectId, String projectName, String accountNumber,
-			String name, String phoneNum) {
+			String name, String phoneNum, int page, int size) {
 		String sql = " SELECT tp.ID,td.`NAME` DEPARTMENT_NAME, tp.PROJECT_ID, tp.PROJECT_NAME PROJECT_NAME, tr.`NAME` ROLE_NAME,tu.ACCOUNT_NUMBER,tu.`NAME` USER_NAME,tu.PHONE_NUM,tp.CREATED_TIME FROM"
 				+ " T_PROJECT tp LEFT JOIN T_DEPARTMENT td ON tp.DEPARTMENT_ID = td.ID "
 				+ " LEFT JOIN T_USERS tu ON tp.principal_id = tu.id "
@@ -54,13 +55,48 @@ public class ProjectDaoImpl implements ProjectDao {
 			sql += " and tu.ACCOUNT_NUMBER =" + accountNumber;
 		}
 		if (null != name) {
-			sql += " and tu.NAME = " + name;
+			sql += " and tu.NAME like % " + name + "%";
 		}
 		if (null != phoneNum) {
 			sql += " and tu.PHONE_NUM like %" + phoneNum + "%";
 		}
+		sql += " order by tp.ID desc ";
+		if (page > 0 && size > 0) {
+			sql += "limit " + (page - 1) + "," + size;
+		}
 		List<ProjectDto> list = jdbcTemplate.query(sql, new ProjectDtoMapper());
 		return list;
+	}
+
+	@Override
+	public List<Project> findProjectByUserRelation(Long departmentId, Long ministerId, Long groupId, Long principalId,
+			int page, int size) {
+		String sql = "select * from T_PROJECT where 1=1 ";
+		if (null != departmentId) {
+			sql += " and DEPARTMENT_ID=" + departmentId;
+		}
+		if (null != ministerId) {
+			sql += " and MINISTER_USER_ID=" + ministerId;
+		}
+		if (null != groupId) {
+			sql += " and GROUP_USER_ID=" + groupId;
+		}
+		if (null != principalId) {
+			sql += " and PRINCIPAL_ID=" + principalId;
+		}
+		sql += " order by ID desc";
+		if (page > 0 && size > 0) {
+			sql += " limit " + (page - 1) + "," + size;
+		}
+		List<Project> list = jdbcTemplate.query(sql, new ProjectMapper());
+		return list;
+	}
+
+	@Override
+	public Project findProjectPrincipals(String projectId) {
+		Project project = jdbcTemplate.queryForObject("SELECT * FROM T_PROJECT WHERE PROJECT_ID=" + projectId,
+				new ProjectMapper());
+		return project;
 	}
 
 }

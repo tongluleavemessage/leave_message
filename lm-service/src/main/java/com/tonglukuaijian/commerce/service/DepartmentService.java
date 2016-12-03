@@ -19,10 +19,11 @@ public interface DepartmentService {
 	 * @param vo
 	 */
 	public void update(DepartmentVo vo);
-	
+
 	/**
 	 * 查询所有
+	 * 
 	 * @return
 	 */
-	public List<Department> getAll();
+	public List<Department> getAll(int page, int size);
 }

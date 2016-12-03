@@ -37,5 +37,5 @@ public interface ProjectService {
 	 * @return
 	 */
 	public List<ProjectDto> getByParam(Long departmentId, String projectId, String projectName, String accountNumber,
-			String name, String phoneNum);
+			String name, String phoneNum, int page, int size);
 }
