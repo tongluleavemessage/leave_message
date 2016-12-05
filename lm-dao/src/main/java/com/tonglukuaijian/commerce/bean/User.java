@@ -1,5 +1,7 @@
 package com.tonglukuaijian.commerce.bean;
 
+import java.util.Date;
+
 /**
  * 用户
  *
@@ -35,6 +37,10 @@ public class User {
 	private Integer status;
 
 	private Integer using;
+
+	// 登录时间
+	private Date loginTime;
+	private Date createdTime;
 
 	public String getAccountNumber() {
 		return accountNumber;
@@ -106,6 +112,22 @@ public class User {
 
 	public void setUsing(Integer using) {
 		this.using = using;
+	}
+
+	public Date getLoginTime() {
+		return loginTime;
+	}
+
+	public void setLoginTime(Date loginTime) {
+		this.loginTime = loginTime;
+	}
+
+	public Date getCreatedTime() {
+		return createdTime;
+	}
+
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
 	}
 
 }

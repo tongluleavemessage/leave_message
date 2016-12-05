@@ -20,17 +20,19 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public void save(User user) {
 		jdbcTemplate.update(
-				"insert into T_USERS(ACCOUNT_NUMBER,PASSWORD,NAME,PHONE_NUM,DEPARTMENT_ID,ROLE_ID,STATUS) values(?,?,?,?,?,?,?)",
+				"insert into T_USERS(ACCOUNT_NUMBER,PASSWORD,NAME,PHONE_NUM,DEPARTMENT_ID,ROLE_ID,STATUS,CREATED_TIME) values(?,?,?,?,?,?,?,?)",
 				new Object[] { user.getAccountNumber(), DigestUtils.md5DigestAsHex(user.getPassword().getBytes()),
-						user.getName(), user.getPhoneNum(), user.getDepartmentId(), user.getRoleId(),
-						user.getStatus() });
+						user.getName(), user.getPhoneNum(), user.getDepartmentId(), user.getRoleId(), user.getStatus(),
+						user.getCreatedTime() });
 	}
 
 	@Override
 	public void update(User user) {
-		jdbcTemplate.update("update T_USERS set PASSWORD=?,PHONE_NUM=?,DEPARTMENT_ID=?,ROLE_ID=?,STATUS=? WHERE ID=?",
+		jdbcTemplate.update(
+				"update T_USERS set PASSWORD=?,PHONE_NUM=?,DEPARTMENT_ID=?,ROLE_ID=?,STATUS=?,LOGIN_TIME=?, WHERE ID=?",
 				new Object[] { DigestUtils.md5DigestAsHex(user.getPassword().getBytes()), user.getPhoneNum(),
-						user.getDepartmentId(), user.getRoleId(), user.getStatus(), user.getId() });
+						user.getDepartmentId(), user.getRoleId(), user.getStatus(), user.getLoginTime(),
+						user.getId() });
 	}
 
 	@Override

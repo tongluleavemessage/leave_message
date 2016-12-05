@@ -1,5 +1,6 @@
 package com.tonglukuaijian.commerce.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.util.DigestUtils;
 
 import com.tonglukuaijian.commerce.bean.User;
 import com.tonglukuaijian.commerce.dao.UserDao;
+import com.tonglukuaijian.commerce.enums.CommonStatusEnum;
 import com.tonglukuaijian.commerce.enums.UserUsingEnum;
 import com.tonglukuaijian.commerce.exception.ServiceException;
 import com.tonglukuaijian.commerce.service.UserService;
@@ -49,6 +51,7 @@ public class UserServiceImpl implements UserService {
 		user.setUsing(UserUsingEnum.NONUSE.value());
 		user.setRoleId(vo.getRoleId());
 		user.setStatus(vo.getStatus());
+		user.setCreatedTime(new Date());
 		return user;
 	}
 
@@ -56,9 +59,12 @@ public class UserServiceImpl implements UserService {
 	public User login(String accountNumber, String password) {
 		User user = userDao.findByAccountNumberAndPassword(accountNumber,
 				DigestUtils.md5DigestAsHex(password.getBytes()));
-		if (null == user) {
-			throw new ServiceException("用户不存在");
+		if (null == user || user.getStatus() == CommonStatusEnum.CLOSE.value()) {
+			throw new ServiceException("用户不存在或被禁用");
 		}
+		// 修改登录时间
+		user.setLoginTime(new Date());
+		userDao.update(user);
 		return user;
 	}
 

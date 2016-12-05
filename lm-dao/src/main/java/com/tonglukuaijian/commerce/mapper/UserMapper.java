@@ -20,6 +20,8 @@ public class UserMapper implements RowMapper<User> {
 		user.setPhoneNum(rs.getString("PHONE_NUM"));
 		user.setRoleId(rs.getLong("ROLE_ID"));
 		user.setStatus(rs.getInt("STATUS"));
+		user.setCreatedTime(rs.getDate("CREATED_TIME"));
+		user.setLoginTime(rs.getDate("LOGIN_TIME"));
 		return user;
 	}
 
