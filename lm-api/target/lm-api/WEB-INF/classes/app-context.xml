@@ -54,9 +54,36 @@
 		<property name="acquireRetryAttempts" value="0" />
 	</bean>
 	<!-- 配置jdbc的模板类JdbcTemplate -->
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	<bean id="jdbcTemplate" class="com.tonglukuaijian.commerce.OrmTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	<import resource="classpath:restful-context.xml" />
 
+	 <!-- 定时任务 -->
+	<bean id="leaveMssageStatusJob" class="com.tonglukuaijian.commerce.job.LeaveMssageStatusJob" />
+	<bean id="SpringQtzJobMethod"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="leaveMssageStatusJob" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+	</bean> 
+
+	<!-- ======================== 调度触发器 ========================leaveMssageStatusJob -->
+	<bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="SpringQtzJobMethod"></property>
+		<property name="cronExpression" value="5 0 0 * * ?"></property>
+	</bean>
+
+	<!-- ======================== 调度工厂 ======================== -->
+	<bean id="SpringJobSchedulerFactoryBean"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="CronTriggerBean" />
+			</list>
+		</property>
+	</bean> 
 </beans>

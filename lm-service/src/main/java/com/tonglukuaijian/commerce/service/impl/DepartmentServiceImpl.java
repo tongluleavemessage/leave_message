@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.tonglukuaijian.commerce.bean.Department;
 import com.tonglukuaijian.commerce.dao.DepartmentDao;
-import com.tonglukuaijian.commerce.exception.ServiceException;
+import com.tonglukuaijian.commerce.out.OutMessage;
 import com.tonglukuaijian.commerce.service.DepartmentService;
 import com.tonglukuaijian.commerce.vo.DepartmentVo;
+import com.tonglukuaijian.commerce.vo.UpdateDepartmentVo;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -19,35 +20,40 @@ public class DepartmentServiceImpl implements DepartmentService {
 	private DepartmentDao departmentDao;
 
 	@Override
-	public void add(DepartmentVo vo) {
-		if (null == vo.getName()) {
-			throw new ServiceException("参数有误");
-		}
+	public OutMessage<?> add(DepartmentVo vo) {
 		Department department = wrapDepartment(vo);
 		departmentDao.save(department);
+		return OutMessage.successMessage();
 	}
 
 	@Override
-	public void update(DepartmentVo vo) {
-		if (null == vo.getId()) {
-			throw new ServiceException("未指定部门");
+	public OutMessage<?> update(UpdateDepartmentVo vo) {
+		Department department = departmentDao.findById(vo.getDepartmentId());
+		if (department == null) {
+			return OutMessage.errorMessage("该部门不存在");
 		}
-		Department department = wrapDepartment(vo);
+		if (vo.getName() != null) {
+			department.setName(vo.getName());
+		}
+		if (vo.getStatus() != null) {
+			department.setStatus(vo.getStatus());
+		}
 		departmentDao.update(department);
+		return OutMessage.successMessage();
 	}
 
 	private Department wrapDepartment(DepartmentVo vo) {
 		Department department = new Department();
 		department.setCreatedTime(new Date());
-		department.setId(vo.getId());
 		department.setStatus(vo.getStatus());
 		department.setName(vo.getName());
 		return department;
 	}
 
 	@Override
-	public List<Department> getAll(int page, int size) {
-		return departmentDao.findAll(page, size);
+	public OutMessage<?> getAll(int page, int size) {
+		List<Department> list= departmentDao.findAll(page, size);
+		return OutMessage.successMessage(list);
 	}
 
 }

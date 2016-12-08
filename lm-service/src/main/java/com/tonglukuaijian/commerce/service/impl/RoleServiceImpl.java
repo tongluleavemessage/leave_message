@@ -8,9 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.tonglukuaijian.commerce.bean.Role;
 import com.tonglukuaijian.commerce.dao.RoleDao;
-import com.tonglukuaijian.commerce.exception.ServiceException;
+import com.tonglukuaijian.commerce.out.OutMessage;
 import com.tonglukuaijian.commerce.service.RoleService;
 import com.tonglukuaijian.commerce.vo.RoleVo;
+import com.tonglukuaijian.commerce.vo.UpdateRoleVo;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -19,26 +20,35 @@ public class RoleServiceImpl implements RoleService {
 	private RoleDao roleDao;
 
 	@Override
-	public void add(RoleVo vo) {
-		if (vo == null || vo.getName() == null) {
-			throw new ServiceException("请输入角色名称");
-		}
+	public OutMessage<?> add(RoleVo vo) {
 		Role role = wrapRole(vo);
 		roleDao.save(role);
+		return OutMessage.successMessage();
 	}
 
 	@Override
-	public void update(RoleVo vo) {
-		if (null == vo || null == vo.getId()) {
-			throw new ServiceException("未指定角色");
+	public OutMessage<?> update(UpdateRoleVo vo) {
+		Role role = roleDao.findById(vo.getRoleId());
+		if (role == null) {
+			return OutMessage.errorMessage("角色不存在");
 		}
-		Role role = wrapRole(vo);
+		if (vo.getExplain() != null) {
+			role.setExplain(vo.getExplain());
+		}
+		if (vo.getName() != null) {
+			role.setName(vo.getName());
+		}
+		if (vo.getStatus() != null) {
+			role.setStatus(vo.getStatus());
+		}
 		roleDao.update(role);
+		return OutMessage.successMessage();
 	}
 
 	@Override
-	public List<Role> getAll(int page, int size) {
-		return roleDao.findAll(page, size);
+	public OutMessage<?> getAll(int page, int size) {
+		List<Role> list = roleDao.findAll(page, size);
+		return OutMessage.successMessage(list);
 	}
 
 	private Role wrapRole(RoleVo vo) {
@@ -47,7 +57,6 @@ public class RoleServiceImpl implements RoleService {
 		role.setExplain(vo.getExplain());
 		role.setName(vo.getName());
 		role.setStatus(vo.getStatus());
-		role.setId(vo.getId());
 		return role;
 	}
 

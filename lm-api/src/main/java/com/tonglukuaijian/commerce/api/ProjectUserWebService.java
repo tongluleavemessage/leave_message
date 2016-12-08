@@ -1,7 +1,5 @@
 package com.tonglukuaijian.commerce.api;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +7,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -16,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tonglukuaijian.commerce.GetParams;
-import com.tonglukuaijian.commerce.dto.ProjectUserDto;
+import com.tonglukuaijian.commerce.out.OutMessage;
 import com.tonglukuaijian.commerce.service.ProjectUserService;
 import com.tonglukuaijian.commerce.vo.ProjectUserVo;
 
@@ -29,36 +28,22 @@ public class ProjectUserWebService {
 
 	@POST
 	@Path("/add")
-	public Map<String, Object> add(ProjectUserVo vo) {
-		projectUserService.add(vo);
-		Map<String, Object> map = new HashMap<>();
-		map.put("message", "ok");
-		return map;
-
+	public OutMessage<?> add(ProjectUserVo vo) {
+		return projectUserService.add(vo);
 	}
 
 	@DELETE
-	@Path("/delete")
-	public Map<String, Object> delete(@Context HttpServletRequest request) {
-		Long id = null;
-		if (null != request.getParameter("id")) {
-			id = Long.parseLong(request.getParameter("id"));
-		}
-		projectUserService.remove(id);
-		Map<String, Object> map = new HashMap<>();
-		map.put("message", "ok");
-		return map;
+	@Path("/{id}")
+	public OutMessage<?> delete(@PathParam("id") Long id,  @Context HttpServletRequest request) {
+		return projectUserService.remove(id);
 	}
 
 	@GET
 	@Path("/get")
-	public Map<String, Object> getByProjectId(@Context HttpServletRequest request) {
+	public OutMessage<?> getByProjectId(@Context HttpServletRequest request) {
 		String projectId = request.getParameter("projectId");
 		Map<String, Integer> pageMap = GetParams.getPage(request);
-		List<ProjectUserDto> list = projectUserService.getUser(projectId, pageMap.get("page"), pageMap.get("size"));
-		Map<String, Object> map = new HashMap<>();
-		map.put("data", list);
-		return map;
+		return projectUserService.getUser(projectId, pageMap.get("page"), pageMap.get("size"));
 
 	}
 

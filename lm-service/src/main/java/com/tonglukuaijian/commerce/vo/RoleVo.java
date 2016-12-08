@@ -1,5 +1,7 @@
 package com.tonglukuaijian.commerce.vo;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 角色
  *
@@ -9,14 +11,14 @@ public class RoleVo {
 	/**
 	 * 角色名称
 	 */
+	@NotNull(message = "名称不能为空")
 	private String name;
 	/**
 	 * 角色说明
 	 */
 	private String explain;
+	@NotNull(message = "状态不能为空")
 	private Integer status;
-	
-	private Long id;
 
 	public String getName() {
 		return name;
@@ -42,13 +44,4 @@ public class RoleVo {
 		this.status = status;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	
 }

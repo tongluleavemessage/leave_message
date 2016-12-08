@@ -1,3 +1,5 @@
+D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\batch\ProjectUserBatch.java
+D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\mapper\UserDtoMapper.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dao\impl\LeaveMessageAssignRecordDaoImpl.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\mapper\ProjectMapper.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dao\UserDao.java
@@ -10,12 +12,14 @@ D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dao\Le
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dao\impl\UserDaoImpl.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\mapper\LeaveMessageDtoMapper.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dto\LeaveMessageInfo.java
+D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\OrmTemplate.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\mapper\LeaveMessageFollowRecordMapper.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\bean\LeaveMessage.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\mapper\LeaveMessageAssignRecordDtoMapper.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\bean\User.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dao\RoleDao.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dao\DepartmentDao.java
+D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dto\UserDto.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\mapper\LeaveMessageAssignRecordMapper.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\bean\Project.java
 D:\project\leave_message\lm-dao\src\main\java\com\tonglukuaijian\commerce\dto\ProjectUserDto.java

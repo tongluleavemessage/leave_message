@@ -1,5 +1,6 @@
 package com.tonglukuaijian.commerce.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.tonglukuaijian.commerce.bean.LeaveMessageAssignRecord;
@@ -7,6 +8,7 @@ import com.tonglukuaijian.commerce.bean.LeaveMessageFollow;
 import com.tonglukuaijian.commerce.bean.LeaveMessageFollowRecord;
 import com.tonglukuaijian.commerce.dto.LeaveMessageAssignRecordDto;
 import com.tonglukuaijian.commerce.dto.LeaveMessageInfo;
+import com.tonglukuaijian.commerce.out.OutMessage;
 import com.tonglukuaijian.commerce.vo.LeaveMessageAssignVo;
 import com.tonglukuaijian.commerce.vo.LeaveMessageFollowVo;
 import com.tonglukuaijian.commerce.vo.LeaveMessageVo;
@@ -21,7 +23,7 @@ public interface LeaveMessageService {
 	/**
 	 * 添加留言
 	 */
-	public void addLeaveMessage(LeaveMessageVo vo);
+	public OutMessage<?> addLeaveMessage(LeaveMessageVo vo);
 
 	/**
 	 * 根据条件获取留言
@@ -37,16 +39,16 @@ public interface LeaveMessageService {
 	 * @param size
 	 * @return
 	 */
-	public List<LeaveMessageInfo> getByParams(Long loginUserId, String projectId, String projectName,
-			String principalName, String principalPhone, String customerName, Integer status, String createdTimeStart,
-			String createdTimeEnd, int page, int size);
+	public OutMessage<?> getByParams(Long loginUserId, String projectId, String projectName, String principalName,
+			String principalPhone, String customerName, Integer status, String createdTimeStart, String createdTimeEnd,
+			int page, int size);
 
 	/**
 	 * 留言分派
 	 * 
 	 * @param vo
 	 */
-	public void assignLeaveMessage(Long loginUserId,LeaveMessageAssignVo vo);
+	public OutMessage<?> assignLeaveMessage(Long loginUserId, LeaveMessageAssignVo vo);
 
 	/**
 	 * 留言日志查看
@@ -80,7 +82,7 @@ public interface LeaveMessageService {
 	 * 
 	 * @param vo
 	 */
-	void followLeaveMessage(LeaveMessageFollowVo vo);
+	OutMessage<?> followLeaveMessage(LeaveMessageFollowVo vo);
 
 	/**
 	 * 获取留言跟进流水
@@ -114,4 +116,11 @@ public interface LeaveMessageService {
 	 * @return
 	 */
 	LeaveMessageAssignRecord getLeaveMessageAssignRecordById(Long id);
+
+	/**
+	 * 留言任务
+	 * 
+	 * @param now
+	 */
+	void leaveMessageJob(Date now);
 }

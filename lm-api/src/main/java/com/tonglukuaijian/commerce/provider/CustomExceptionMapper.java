@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tonglukuaijian.commerce.exception.ServiceException;
+import com.tonglukuaijian.commerce.out.OutMessage;
 
 public class CustomExceptionMapper implements ExceptionMapper<Exception> {
 
@@ -23,7 +24,7 @@ public class CustomExceptionMapper implements ExceptionMapper<Exception> {
 	public Response toResponse(Exception e) {
 		if (e instanceof ServiceException) {
 			return Response.status(Status.OK).encoding("UTF-8").type(MediaType.APPLICATION_JSON)
-					.language(Locale.SIMPLIFIED_CHINESE).entity(e.getMessage()).build();
+					.language(Locale.SIMPLIFIED_CHINESE).entity(OutMessage.errorMessage(e.getMessage())).build();
 		} else if (e instanceof ConstraintViolationException) {/** 参数验证失败异常 */
 			ConstraintViolationException exception = (ConstraintViolationException) e;
 			StringBuilder sbHint = new StringBuilder("参数错误");
@@ -69,11 +70,11 @@ public class CustomExceptionMapper implements ExceptionMapper<Exception> {
 			logger.error(error);
 			String info = sbHint.toString().replaceAll("，实际值\\[.*\\]", "");
 			return Response.status(Status.OK).encoding("UTF-8").type(MediaType.APPLICATION_JSON)
-					.language(Locale.SIMPLIFIED_CHINESE).entity(info).build();
+					.language(Locale.SIMPLIFIED_CHINESE).entity(OutMessage.errorMessage(info)).build();
 		}
 		logger.error("系统错误", e);
 		return Response.status(Status.OK).encoding("UTF-8").language(Locale.SIMPLIFIED_CHINESE)
-				.type(MediaType.APPLICATION_JSON_TYPE).entity("服务器错误").build();
+				.type(MediaType.APPLICATION_JSON_TYPE).entity(OutMessage.errorMessage("服务器错误")).build();
 	}
 
 }

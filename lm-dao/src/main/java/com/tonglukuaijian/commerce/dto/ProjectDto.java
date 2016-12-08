@@ -9,6 +9,22 @@ public class ProjectDto {
 	 * 部门名称
 	 */
 	private String departmentName;
+	/**
+	 * 部长账号
+	 */
+	private String ministerNumber;
+	/**
+	 * 部长名称
+	 */
+	private String ministerName;
+	/**
+	 * 群总账号
+	 */
+	private String groupNumber;
+	/**
+	 * 群总名称
+	 */
+	private String groupName;
 	private String projectId;
 	private String projectName;
 	/**
@@ -99,6 +115,38 @@ public class ProjectDto {
 
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	public String getMinisterNumber() {
+		return ministerNumber;
+	}
+
+	public void setMinisterNumber(String ministerNumber) {
+		this.ministerNumber = ministerNumber;
+	}
+
+	public String getMinisterName() {
+		return ministerName;
+	}
+
+	public void setMinisterName(String ministerName) {
+		this.ministerName = ministerName;
+	}
+
+	public String getGroupNumber() {
+		return groupNumber;
+	}
+
+	public void setGroupNumber(String groupNumber) {
+		this.groupNumber = groupNumber;
+	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
 }

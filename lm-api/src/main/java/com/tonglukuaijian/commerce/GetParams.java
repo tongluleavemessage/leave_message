@@ -20,4 +20,11 @@ public class GetParams {
 		map.put("size", size);
 		return map;
 	}
+
+	public static Long getLoginUserId(HttpServletRequest request) {
+		if (request.getHeader("userid") == null) {
+			return null;
+		}
+		return Long.parseLong(request.getHeader("userid"));
+	}
 }

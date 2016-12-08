@@ -11,13 +11,7 @@ public interface LeaveMessageDao {
 	 */
 	public void saveLeaveMesage(LeaveMessage leaveMessage);
 
-	/**
-	 * 分派留言
-	 * 
-	 * @param id 留言ID
-	 * @param userId 留言负责人ID
-	 */
-	void assign(Long id, Long userId);
+
 
 	/**
 	 * 留言查找
@@ -49,4 +43,19 @@ public interface LeaveMessageDao {
 	List<LeaveMessageInfo> findByParams(Long principalUserId, String beLongUserId, String projectId, String projectName,
 			String principalName, String principalPhone, String customerName, String status, String createdTimeStart,
 			String createdTimeEnd, int page, int size);
+
+	/**
+	 * 根据状态查询留言
+	 * 
+	 * @param status
+	 * @return
+	 */
+	List<LeaveMessage> findByStatus(String status);
+
+	/**
+	 * 留言修改
+	 * 
+	 * @param leaveMessage
+	 */
+	void updateLeaveMesage(LeaveMessage leaveMessage);
 }

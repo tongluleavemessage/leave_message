@@ -1,7 +1,11 @@
 package com.tonglukuaijian.commerce.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -29,6 +33,7 @@ import com.tonglukuaijian.commerce.dto.LeaveMessageInfo;
 import com.tonglukuaijian.commerce.enums.LeaveMessageStatusEnum;
 import com.tonglukuaijian.commerce.enums.RoleEnum;
 import com.tonglukuaijian.commerce.exception.ServiceException;
+import com.tonglukuaijian.commerce.out.OutMessage;
 import com.tonglukuaijian.commerce.service.LeaveMessageService;
 import com.tonglukuaijian.commerce.vo.LeaveMessageAssignVo;
 import com.tonglukuaijian.commerce.vo.LeaveMessageFollowVo;
@@ -51,22 +56,29 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 	private RoleDao roleDao;
 
 	@Override
-	public void addLeaveMessage(LeaveMessageVo vo) {
+	public OutMessage<?> addLeaveMessage(LeaveMessageVo vo) {
 		// 获取项目负责人
 		Project project = projectDao.findProjectPrincipals(vo.getProjectId());
+		if (project == null) {
+			return OutMessage.errorMessage("该项目不存在");
+		}
 		LeaveMessage leaveMessage = wrapLeaveMessage(vo, project);
 		leaveMessageDao.saveLeaveMesage(leaveMessage);
+		return OutMessage.successMessage();
 	}
 
 	@Override
-	public List<LeaveMessageInfo> getByParams(Long loginUserId, String projectId, String projectName,
-			String principalName, String principalPhone, String customerName, Integer status, String createdTimeStart,
-			String createdTimeEnd, int page, int size) {
+	public OutMessage<?> getByParams(Long loginUserId, String projectId, String projectName, String principalName,
+			String principalPhone, String customerName, Integer status, String createdTimeStart, String createdTimeEnd,
+			int page, int size) {
 		List<LeaveMessageInfo> result = new ArrayList<>();
 		// 判断登录角色
-		User user = userDao.findById(loginUserId);
+		User user = userDao.findUserById(loginUserId);
+		if (user == null) {
+			return OutMessage.errorMessage("未登录");
+		}
 		List<LeaveMessageInfo> list = new ArrayList<>();
-		String endStaus = "";
+		String endStaus = null;
 		// 负责人
 		Long principalUserId = loginUserId;
 		// 所属者
@@ -99,7 +111,7 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 			leaveMessageDto.setCustomerPhone(encryption(leaveMessageDto.getCustomerPhone()));
 			result.add(leaveMessageDto);
 		}
-		return result;
+		return OutMessage.successMessage(result);
 	}
 
 	/**
@@ -122,7 +134,7 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 
 	private LeaveMessage wrapLeaveMessage(LeaveMessageVo vo, Project project) {
 		LeaveMessage leaveMessage = new LeaveMessage();
-		leaveMessage.setStatus(LeaveMessageStatusEnum.NORMAL.value());
+		leaveMessage.setStatus(LeaveMessageStatusEnum.TODAY_COMMUNICATE.value());
 		leaveMessage.setProjectId(vo.getProjectId());
 		leaveMessage.setProjectName(vo.getProjectName());
 		leaveMessage.setName(vo.getName());
@@ -137,10 +149,7 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 	@Override
 	public LeaveMessageInfo getLeaveMessageInfo(Long loginUserId, Long leaveMessageId) {
 		LeaveMessage leaveMessage = leaveMessageDao.findById(leaveMessageId);
-		if (null == leaveMessage) {
-			throw new ServiceException("该留言不存在");
-		}
-		User principalUser = userDao.findById(leaveMessage.getPrincipal());
+		User principalUser = userDao.findUserById(leaveMessage.getPrincipal());
 		// 判断是否解密
 		Boolean decode = false;
 		if (loginUserId == leaveMessage.getPrincipal()) {
@@ -148,22 +157,40 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 		}
 		LeaveMessageInfo dto = LeaveMessageAssembler.wrapLeaveMessageToLeaveMessageDto(leaveMessage, principalUser,
 				decode);
+		if (!decode) {
+			dto.setPrincipalPhoneNum(encryption(dto.getCustomerPhone()));
+		}
 		return dto;
 	}
 
 	@Override
-	public void assignLeaveMessage(Long loginUserId,LeaveMessageAssignVo vo) {
-		leaveMessageDao.assign(vo.getLeaveMessageId(), vo.getAssignUserId());
-
-		User assignUser = userDao.findById(vo.getAssignUserId());
-		Role assignRole = roleDao.findById(assignUser.getRoleId());
+	public OutMessage<?> assignLeaveMessage(Long loginUserId, LeaveMessageAssignVo vo) {
 		LeaveMessage leaveMessage = leaveMessageDao.findById(vo.getLeaveMessageId());
-		User operatorUser = userDao.findById(loginUserId);
+		if (leaveMessage == null) {
+			return OutMessage.errorMessage("留言不存在");
+		}
+		leaveMessage.setPrincipal(vo.getAssignUserId());
+		leaveMessage.setStatus(LeaveMessageStatusEnum.TODAY_COMMUNICATE.value());
+		leaveMessage.setModifyTime(new Date());
+		leaveMessageDao.updateLeaveMesage(leaveMessage);
+
+		/**
+		 * 分配用户
+		 */
+		User assignUser = userDao.findUserById(vo.getAssignUserId());
+		Role assignRole = roleDao.findById(assignUser.getRoleId());
+
+		/**
+		 * 操作用户
+		 */
+		User operatorUser = userDao.findUserById(loginUserId);
 		Role operatorRole = roleDao.findById(operatorUser.getRoleId());
 		LeaveMessageAssignRecord po = wrapLeaveMessageAssignRecord(assignUser.getPhoneNum(), assignRole.getName(),
 				assignUser.getAccountNumber(), assignUser.getName(), leaveMessage, operatorRole.getName(),
 				operatorUser.getName(), operatorUser.getPhoneNum());
 		leaveMessageAssignRecordDao.save(po);
+
+		return OutMessage.successMessage();
 
 	}
 
@@ -200,13 +227,15 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 	public List<LeaveMessageAssignRecordDto> getLeaveMessageAssignRecordByParams(String projectId, String projectName,
 			String projectPrincipal, String principalPhone, String customerName, Integer status,
 			String createdTimeStart, String createdTimeEnd, int page, int size) {
-		return leaveMessageAssignRecordDao.findByParams(projectId, projectName, projectPrincipal, principalPhone,
-				customerName, status, createdTimeStart, createdTimeEnd, page, size);
+		List<LeaveMessageAssignRecordDto> list = leaveMessageAssignRecordDao.findByParams(projectId, projectName,
+				projectPrincipal, principalPhone, customerName, status, createdTimeStart, createdTimeEnd, page, size);
+		return list;
 	}
 
 	@Override
 	public List<LeaveMessageAssignRecord> getLeaveMessageAssignRecord(Long leaveMessageId) {
-		return leaveMessageAssignRecordDao.findByLeaveMessageId(leaveMessageId);
+		List<LeaveMessageAssignRecord> list = leaveMessageAssignRecordDao.findByLeaveMessageId(leaveMessageId);
+		return list;
 	}
 
 	@Override
@@ -223,8 +252,8 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 
 	@Override
 	public LeaveMessageAssignRecord getLeaveMessageAssignRecordById(Long id) {
-		LeaveMessageAssignRecord follow = leaveMessageAssignRecordDao.findById(id);
-		return follow;
+		LeaveMessageAssignRecord assignRecord = leaveMessageAssignRecordDao.findById(id);
+		return assignRecord;
 	}
 
 	@Override
@@ -234,7 +263,7 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 	}
 
 	@Override
-	public void followLeaveMessage(LeaveMessageFollowVo vo) {
+	public OutMessage<?> followLeaveMessage(LeaveMessageFollowVo vo) {
 		// 是否有跟进
 		LeaveMessageFollow po = leaveMessageFollowDao.findByleaveMessageId(vo.getLeaveMessageId());
 		if (null != po) {
@@ -246,7 +275,7 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 			leaveMessageFollowDao.save(po);
 		}
 		// 跟进日志
-		User operatorUser = userDao.findById(vo.getOperatorUserId());
+		User operatorUser = userDao.findUserById(vo.getOperatorUserId());
 		if (operatorUser == null) {
 			throw new ServiceException("用户不存在");
 		}
@@ -259,6 +288,7 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 		followRecord.setReturnTime(vo.getReturnTime());
 		followRecord.setStatus(vo.getStatus());
 		leaveMessageFollowDao.saveFollowRecord(followRecord);
+		return OutMessage.successMessage();
 	}
 
 	private LeaveMessageFollow wrapLeaveMessageFollow(LeaveMessageFollowVo vo) {
@@ -270,6 +300,43 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 		lmf.setReturnTime(vo.getReturnTime());
 		lmf.setStatus(vo.getStatus());
 		return lmf;
+	}
+
+	@Override
+	public void leaveMessageJob(Date now) {
+		String status = LeaveMessageStatusEnum.TODAY_COMMUNICATE.value() + ","
+				+ LeaveMessageStatusEnum.RETURN_VISIT.value();
+		List<LeaveMessage> list = leaveMessageDao.findByStatus(status);
+		for (LeaveMessage leaveMessage : list) {
+			if (leaveMessage.getModifyTime() != null) {
+				updateLeaveMessageStatus(leaveMessage.getModifyTime(), now, leaveMessage);
+			} else {
+				updateLeaveMessageStatus(leaveMessage.getCreatedTime(), now, leaveMessage);
+			}
+
+		}
+	}
+
+	private void updateLeaveMessageStatus(Date comparison, Date now, LeaveMessage leaveMessage) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date late = dayAdd(comparison, 3);
+		try {
+			Date result = sdf.parse(sdf.format(late));
+			if (now.getTime() > result.getTime()) {
+				leaveMessage.setStatus(LeaveMessageStatusEnum.NOT_CONTACT.value());
+				leaveMessage.setModifyTime(now);
+				leaveMessageDao.updateLeaveMesage(leaveMessage);
+			}
+		} catch (ParseException e) {
+			logger.error("留言 job 日期格式化出错 ：" + e);
+		}
+	}
+
+	private Date dayAdd(Date date, int day) {
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(date);
+		calendar.add(calendar.DATE, day);// 把日期往后增加一天.整数往后推,负数往前移动
+		return calendar.getTime(); // 这个时间就是日期往后推一天的结果
 	}
 
 }

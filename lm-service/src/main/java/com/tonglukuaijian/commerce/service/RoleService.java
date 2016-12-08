@@ -1,9 +1,8 @@
 package com.tonglukuaijian.commerce.service;
 
-import java.util.List;
-
-import com.tonglukuaijian.commerce.bean.Role;
+import com.tonglukuaijian.commerce.out.OutMessage;
 import com.tonglukuaijian.commerce.vo.RoleVo;
+import com.tonglukuaijian.commerce.vo.UpdateRoleVo;
 
 public interface RoleService {
 	/**
@@ -11,19 +10,19 @@ public interface RoleService {
 	 * 
 	 * @param vo
 	 */
-	public void add(RoleVo vo);
+	public OutMessage<?> add(RoleVo vo);
 
 	/**
 	 * 修改
 	 * 
 	 * @param vo
 	 */
-	public void update(RoleVo vo);
+	public OutMessage<?> update(UpdateRoleVo vo);
 
 	/**
 	 * 查询所有
 	 * 
 	 * @return
 	 */
-	public List<Role> getAll(int page, int size);
+	public OutMessage<?> getAll(int page, int size);
 }

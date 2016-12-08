@@ -1,9 +1,8 @@
 package com.tonglukuaijian.commerce.service;
 
-import java.util.List;
-
-import com.tonglukuaijian.commerce.dto.ProjectDto;
+import com.tonglukuaijian.commerce.out.OutMessage;
 import com.tonglukuaijian.commerce.vo.ProjectVo;
+import com.tonglukuaijian.commerce.vo.UpdateProjectVo;
 
 /**
  * 项目管理
@@ -16,14 +15,14 @@ public interface ProjectService {
 	 * 
 	 * @param vo
 	 */
-	public void add(ProjectVo vo);
+	public OutMessage<?> add(ProjectVo vo);
 
 	/**
 	 * 修改
 	 * 
 	 * @param vo
 	 */
-	public void update(ProjectVo vo);
+	public OutMessage<?> update(UpdateProjectVo vo);
 
 	/**
 	 * 查询
@@ -36,6 +35,14 @@ public interface ProjectService {
 	 * @param phoneNum
 	 * @return
 	 */
-	public List<ProjectDto> getByParam(Long departmentId, String projectId, String projectName, String accountNumber,
+	public OutMessage<?> getByParam(Long departmentId, String projectId, String projectName, String accountNumber,
 			String name, String phoneNum, int page, int size);
+
+	/**
+	 * 获取项目详情
+	 * 
+	 * @param id
+	 * @return
+	 */
+	OutMessage<?> getProjectManageInfo(Long id);
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.tonglukuaijian.commerce.batch.ProjectUserBatch;
 import com.tonglukuaijian.commerce.bean.ProjectUser;
 import com.tonglukuaijian.commerce.dao.ProjectUserDao;
 import com.tonglukuaijian.commerce.dto.ProjectUserDto;
@@ -18,9 +19,9 @@ public class ProjectUserDaoImpl implements ProjectUserDao {
 	JdbcTemplate jdbcTemplate;
 
 	@Override
-	public void save(ProjectUser projectUser) {
-		jdbcTemplate.update("insert into T_PROJECT_USER (PROJECT_ID,USER_ID,CREATED_TIME) values(?,?,?)",
-				new Object[] { projectUser.getProjectId(), projectUser.getUserId(), projectUser.getCreatedTime() });
+	public void save(List<ProjectUser> projectUser) {
+		jdbcTemplate.batchUpdate("insert into T_PROJECT_USER (PROJECT_ID,USER_ID,CREATED_TIME) values(?,?,?)",
+				new ProjectUserBatch(projectUser));
 	}
 
 	@Override
@@ -30,10 +31,13 @@ public class ProjectUserDaoImpl implements ProjectUserDao {
 
 	@Override
 	public List<ProjectUserDto> findByParams(String projectId, int page, int size) {
-		List<ProjectUserDto> list = jdbcTemplate
-				.query("select tp.ID,tu.ACCOUNT_NUMBER,tu.`NAME`,tu.PHONE_NUM from T_PROJECT_USER tp "
-						+ " LEFT JOIN T_USERS tu on tp.USER_ID=tu.ID where tp.PROJECT_ID=" + projectId + " limit "
-						+ (page - 1) + " ," + size, new ProjectUserDtoMapper());
+		Object[] params = new Object[] { projectId };
+		String sql = "select tp.ID,tu.ACCOUNT_NUMBER,tu.`NAME`,tu.PHONE_NUM from T_PROJECT_USER tp "
+				+ " LEFT JOIN T_USERS tu on tp.USER_ID=tu.ID where tp.PROJECT_ID=?";
+		if (page > 0 && size > 0) {
+			sql += " and limit " + (page - 1) * size + "," + size;
+		}
+		List<ProjectUserDto> list = jdbcTemplate.query(sql, params, new ProjectUserDtoMapper());
 		return list;
 	}
 

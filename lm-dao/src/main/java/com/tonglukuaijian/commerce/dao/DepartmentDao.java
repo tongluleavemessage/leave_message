@@ -30,4 +30,11 @@ public interface DepartmentDao {
 	 * @return
 	 */
 	public List<Department> findAll(int page, int size);
+
+	/**
+	 * 根据ID查询部门
+	 * 
+	 * @param departmentId
+	 */
+	Department findById(Long departmentId);
 }

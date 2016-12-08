@@ -16,8 +16,12 @@ public class ProjectDtoMapper implements RowMapper<ProjectDto> {
 		project.setRoleName(rs.getString("ROLE_NAME"));
 		project.setAccountNumber(rs.getString("ACCOUNT_NUMBER"));
 		project.setUserName(rs.getString("USER_NAME"));
+		project.setMinisterName(rs.getString("MINISTER_NAME"));
+		project.setMinisterNumber(rs.getString("MINISTER_NUMBER"));
+		project.setGroupName(rs.getString("GROUP_NAME"));
+		project.setGroupNumber(rs.getString("GROUP_NUMBER"));
 		project.setPhoneNum(rs.getString("PHONE_NUM"));
-		project.setCreatedTime(rs.getDate("CREATED_TIME"));
+		project.setCreatedTime(rs.getTimestamp("CREATED_TIME"));
 		project.setId(rs.getLong("ID"));
 		project.setProjectId(rs.getString("PROJECT_ID"));
 		project.setProjectName(rs.getString("PROJECT_NAME"));

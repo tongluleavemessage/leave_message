@@ -1,8 +1,9 @@
 package com.tonglukuaijian.commerce.service;
 
-import java.util.List;
-
 import com.tonglukuaijian.commerce.bean.User;
+import com.tonglukuaijian.commerce.out.OutMessage;
+import com.tonglukuaijian.commerce.vo.LoginVo;
+import com.tonglukuaijian.commerce.vo.UpdateUserVo;
 import com.tonglukuaijian.commerce.vo.UserVo;
 
 public interface UserService {
@@ -11,14 +12,14 @@ public interface UserService {
 	 * 
 	 * @param vo
 	 */
-	public void addUser(UserVo vo);
+	public OutMessage<?> addUser(UserVo vo);
 
 	/**
 	 * 修改用户
 	 * 
 	 * @param vo
 	 */
-	public void updateUser(UserVo vo);
+	public OutMessage<?> updateUser(UpdateUserVo vo);
 
 	/**
 	 * 登录
@@ -26,7 +27,7 @@ public interface UserService {
 	 * @param accountNumber
 	 * @param password
 	 */
-	public User login(String accountNumber, String password);
+	public OutMessage<User> login(LoginVo vo);
 
 	/**
 	 * 根据条件获取用户列表
@@ -37,7 +38,7 @@ public interface UserService {
 	 * @param roleId
 	 * @return
 	 */
-	public List<User> getUserByParams(String accountNumber, String name, Long departmentId, Long roleId,
+	public OutMessage<?> getUserByParams(String accountNumber, String name, Long departmentId, Long roleId,
 			String phoneNum, int page, int size);
 
 	/**
@@ -46,5 +47,12 @@ public interface UserService {
 	 * @param userId
 	 * @return
 	 */
-	User getUserInfo(Long userId);
+	OutMessage<?> getUserInfo(Long userId);
+
+	/**
+	 * 删除用户
+	 * 
+	 * @param id
+	 */
+	OutMessage<?> delete(Long loginUserId, Long id);
 }

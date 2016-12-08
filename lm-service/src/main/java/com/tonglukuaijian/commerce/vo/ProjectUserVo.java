@@ -1,9 +1,11 @@
 package com.tonglukuaijian.commerce.vo;
 
+import java.util.List;
+
 public class ProjectUserVo {
 	private Long id;
 	private String projectId;
-	private Long userId;
+	private List<Long> userId;
 
 	public Long getId() {
 		return id;
@@ -21,11 +23,11 @@ public class ProjectUserVo {
 		this.projectId = projectId;
 	}
 
-	public Long getUserId() {
+	public List<Long> getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(List<Long> userId) {
 		this.userId = userId;
 	}
 

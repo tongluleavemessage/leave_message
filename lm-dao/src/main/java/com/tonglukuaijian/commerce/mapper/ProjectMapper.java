@@ -12,7 +12,7 @@ public class ProjectMapper implements RowMapper<Project> {
 	@Override
 	public Project mapRow(ResultSet rs, int arg1) throws SQLException {
 		Project project=new Project();
-		project.setCreatedTime(rs.getDate("CREATED_TIME"));
+		project.setCreatedTime(rs.getTimestamp("CREATED_TIME"));
 		project.setDepartmentId(rs.getLong("DEPARTMENT_ID"));
 		project.setGroupUserId(rs.getLong("GROUP_USER_ID"));
 		project.setId(rs.getLong("ID"));

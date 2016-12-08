@@ -15,7 +15,7 @@ public class LeaveMessageMapper implements RowMapper<LeaveMessage> {
 		po.setBelongToUserId(rs.getLong("BELONGTO_USER_ID"));
 		po.setContent(rs.getString("CONTENT"));
 		po.setId(rs.getLong("ID"));
-		po.setModifyTime(rs.getDate("MODIFY_TIME"));
+		po.setModifyTime(rs.getTimestamp("MODIFY_TIME"));
 		po.setName(rs.getString("NAME"));
 		po.setPhoneNum(rs.getString("PHONE_NUM"));
 		po.setPrincipal(rs.getLong("PRINCIPAL_USER_ID"));

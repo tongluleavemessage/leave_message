@@ -13,16 +13,18 @@ public class LeaveMessageAssembler {
 		dto.setContent(leaveMessage.getContent());
 		dto.setCreatedTime(leaveMessage.getCreatedTime());
 		dto.setCustomerName(leaveMessage.getName());
-		dto.setCustomerPhone(leaveMessage.getPhoneNum());
-		dto.setId(leaveMessage.getId());
 		if (decode) {
-			dto.setPrincipalPhoneNum(new String(Base64Utils.decodeFromString(principalUser.getPhoneNum())));
+			dto.setCustomerPhone(new String(Base64Utils.decodeFromString(leaveMessage.getPhoneNum())));
 		} else {
+			dto.setCustomerPhone(leaveMessage.getPhoneNum());
+		}
+		dto.setId(leaveMessage.getId());
+		if (principalUser != null) {
+			dto.setProjectPrincipalUserName(principalUser.getName());
 			dto.setPrincipalPhoneNum(principalUser.getPhoneNum());
 		}
 		dto.setProjectId(leaveMessage.getProjectId());
 		dto.setProjectName(leaveMessage.getProjectName());
-		dto.setProjectPrincipalUserName(principalUser.getName());
 		dto.setStatus(leaveMessage.getStatus());
 		return dto;
 	}

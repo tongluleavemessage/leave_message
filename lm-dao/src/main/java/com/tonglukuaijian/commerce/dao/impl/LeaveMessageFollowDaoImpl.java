@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.tonglukuaijian.commerce.bean.LeaveMessage;
 import com.tonglukuaijian.commerce.bean.LeaveMessageFollow;
 import com.tonglukuaijian.commerce.bean.LeaveMessageFollowRecord;
 import com.tonglukuaijian.commerce.dao.LeaveMessageFollowDao;
@@ -56,7 +57,7 @@ public class LeaveMessageFollowDaoImpl implements LeaveMessageFollowDao {
 			sql += " and LEAVE_MESSAGE_ID=" + leaveMessageId;
 		}
 		if (null != createdTime) {
-			sql += " and CREATED_TIME<=" + createdTime;
+			sql += " and CREATED_TIME<= '" + createdTime + "'";
 		}
 		List<LeaveMessageFollowRecord> list = jdbcTemplate.query(sql, new LeaveMessageFollowRecordMapper());
 		return list;

@@ -17,13 +17,13 @@ public class LeaveMessageAssignRecordDtoMapper implements RowMapper<LeaveMessage
 		po.setProjectName(rs.getString("PROJECT_NAME"));
 		po.setCustomerName(rs.getString("CUSTOMER_NAME"));
 		po.setStatus(rs.getInt("LEAVE_MESSAGE_STATUS"));
-		po.setLeaveMessageTime(rs.getDate("LEAVE_MESSAGE_CREATED_TIME"));
+		po.setLeaveMessageTime(rs.getTimestamp("LEAVE_MESSAGE_CREATED_TIME"));
 		po.setProjectPrincipalName(rs.getString("PROJECT_PRINCIPAL_NAME"));
 		po.setPrincipalPhoneNum(rs.getString("PHONE_NUM"));
 		po.setOperatorName(rs.getString("OPERATOR_USER_NAME"));
 		po.setOperatorRoleName(rs.getString("OPERATOR_ROLE_NAME"));
 		po.setAssignToUserName(rs.getString("ASSIGN_USER_NAME"));
-		po.setAssignTime(rs.getDate("CREATED_TIME"));
+		po.setAssignTime(rs.getTimestamp("CREATED_TIME"));
 		return po;
 		
 	}

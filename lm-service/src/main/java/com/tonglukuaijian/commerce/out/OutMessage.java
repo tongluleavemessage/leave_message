@@ -1,8 +1,10 @@
 package com.tonglukuaijian.commerce.out;
 
 public class OutMessage<T> {
-	private Integer code;
-	private String message;
+	public static final Integer DEFAULT_CODE = 200;
+	public static final Integer ERROR_CODE = 400;
+	private Integer code = DEFAULT_CODE;
+	private String message = "ok";
 	private T data;
 
 	public Integer getCode() {
@@ -40,16 +42,28 @@ public class OutMessage<T> {
 		this.data = data;
 	}
 
+	public OutMessage(T data) {
+		this.data = data;
+	}
+
 	public OutMessage() {
 		super();
+	}
+
+	public static <S> OutMessage<S> successMessage() {
+		return new OutMessage<S>(DEFAULT_CODE, "ok");
 	}
 
 	public static <S> OutMessage<S> successMessage(Integer code, String message) {
 		return new OutMessage<S>(code, message);
 	}
 
-	public static <S> OutMessage<S> successMessage(Integer code, String message, S data) {
-		return new OutMessage<S>(code, message, data);
+	public static <S> OutMessage<S> successMessage(S data) {
+		return new OutMessage<S>(data);
+	}
+
+	public static <E> OutMessage<E> errorMessage(String message) {
+		return new OutMessage<E>(ERROR_CODE, message);
 	}
 
 	public static <E> OutMessage<E> errorMessage(Integer code, String message) {

@@ -21,7 +21,8 @@ public class LeaveMessageDtoMapper implements RowMapper<LeaveMessageInfo> {
 		po.setCustomerPhone(rs.getString("CUSTOMER_PHONE"));
 		po.setContent(rs.getString("CONTENT"));
 		po.setStatus(rs.getInt("STATUS"));
-		po.setCreatedTime(rs.getDate("CREATED_TIME"));
+		po.setCreatedTime(rs.getTimestamp("CREATED_TIME"));
+		po.setLeaveMessagePrincipalUserId(rs.getLong("PRINCIPAL_USER_ID"));
 		return po;
 	}
 

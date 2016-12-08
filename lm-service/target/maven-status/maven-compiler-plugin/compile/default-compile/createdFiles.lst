@@ -5,10 +5,13 @@ com\tonglukuaijian\commerce\vo\LeaveMessageFollowVo.class
 com\tonglukuaijian\commerce\vo\ProjectVo.class
 com\tonglukuaijian\commerce\service\LeaveMessageService.class
 com\tonglukuaijian\commerce\service\impl\ProjectServiceImpl.class
+com\tonglukuaijian\commerce\vo\UpdateProjectVo.class
+com\tonglukuaijian\commerce\vo\UpdateRoleVo.class
 com\tonglukuaijian\commerce\enums\RoleEnum.class
 com\tonglukuaijian\commerce\vo\ProjectUserVo.class
 com\tonglukuaijian\commerce\vo\RoleVo.class
 com\tonglukuaijian\commerce\vo\LeaveMessageVo.class
+com\tonglukuaijian\commerce\vo\UpdateUserVo.class
 com\tonglukuaijian\commerce\service\impl\RoleServiceImpl.class
 com\tonglukuaijian\commerce\service\impl\DepartmentServiceImpl.class
 com\tonglukuaijian\commerce\enums\UserUsingEnum.class
@@ -24,4 +27,7 @@ com\tonglukuaijian\commerce\service\impl\ProjectUserServiceImpl.class
 com\tonglukuaijian\commerce\vo\LeaveMessageAssignVo.class
 com\tonglukuaijian\commerce\enums\LeaveMessageStatusEnum.class
 com\tonglukuaijian\commerce\assembler\LeaveMessageAssembler.class
+com\tonglukuaijian\commerce\vo\LoginVo.class
+com\tonglukuaijian\commerce\enums\CommonStatusEnum.class
 com\tonglukuaijian\commerce\service\ProjectService.class
+com\tonglukuaijian\commerce\vo\UpdateDepartmentVo.class

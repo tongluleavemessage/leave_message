@@ -9,7 +9,7 @@ public interface ProjectUserDao {
 	/**
 	 * 添加
 	 */
-	public void save(ProjectUser projectUser);
+	public void save(List<ProjectUser> projectUser);
 
 	/**
 	 * 删除

@@ -36,7 +36,7 @@ public class LeaveMessageAssignRecordDaoImpl implements LeaveMessageAssignRecord
 				+ "LEFT JOIN T_LEAVE_MESSAGE TM ON TLR.LEAVE_MESSAGE_ID = TM.ID"
 				+ "LEFT JOIN T_USERS TU ON TM.PRINCIPAL_USER_ID = TU.ID WHERE 1=1";
 		if (null != projectId) {
-			sql += " and TM.PROJECT_ID=" + projectId;
+			sql += " and TM.PROJECT_ID= '" + projectId + "'";
 		}
 		if (null != projectName) {
 			sql += " and TM.PROJECT_NAME like %" + projectName + "%";
@@ -54,17 +54,17 @@ public class LeaveMessageAssignRecordDaoImpl implements LeaveMessageAssignRecord
 			sql += " and TLR.LEAVE_MESSAGE_STATUS=" + status;
 		}
 		if (null != createdTimeStart && null != createdTimeEnd) {
-			sql += " and TM.CREATED_TIME between " + createdTimeStart + " and " + createdTimeEnd;
+			sql += " and TM.CREATED_TIME between '" + createdTimeStart + "' and '" + createdTimeEnd + "'";
 		} else {
 			if (null != createdTimeStart) {
-				sql += " and TM.CREATED_TIME>=" + createdTimeStart;
+				sql += " and TM.CREATED_TIME>= '" + createdTimeStart + "'";
 			} else if (null != createdTimeEnd) {
-				sql += " and TM.CREATED_TIME<=" + createdTimeEnd;
+				sql += " and TM.CREATED_TIME<='" + createdTimeEnd + "'";
 			}
 		}
 		sql += " order by ID desc";
 		if (page > 0 && size > 0) {
-			sql += " limit " + (page - 1) + " , " + size;
+			sql += " limit " + (page - 1)*size + " , " + size;
 		}
 		List<LeaveMessageAssignRecordDto> list = jdbcTemplate.query(sql, new LeaveMessageAssignRecordDtoMapper());
 		return list;
@@ -72,17 +72,18 @@ public class LeaveMessageAssignRecordDaoImpl implements LeaveMessageAssignRecord
 
 	@Override
 	public List<LeaveMessageAssignRecord> findByLeaveMessageId(Long leaveMessageId) {
+		Object[] params = new Object[] { leaveMessageId };
 		List<LeaveMessageAssignRecord> list = jdbcTemplate.query(
-				"SELECT * FROM T_LEAVE_MESSAGE_ASSIGN_RECORD WHERE LEAVE_MESSAGE_ID=" + leaveMessageId,
+				"SELECT * FROM T_LEAVE_MESSAGE_ASSIGN_RECORD WHERE LEAVE_MESSAGE_ID=?",params,
 				new LeaveMessageAssignRecordMapper());
 		return list;
 	}
-	
+
 	@Override
 	public LeaveMessageAssignRecord findById(Long id) {
+		Object[] params = new Object[] { id };
 		LeaveMessageAssignRecord assignRecord = jdbcTemplate.queryForObject(
-				"SELECT * FROM T_LEAVE_MESSAGE_ASSIGN_RECORD WHERE ID=" + id,
-				new LeaveMessageAssignRecordMapper());
+				"SELECT * FROM T_LEAVE_MESSAGE_ASSIGN_RECORD WHERE ID=?", params, new LeaveMessageAssignRecordMapper());
 		return assignRecord;
 	}
 

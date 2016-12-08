@@ -1,30 +1,37 @@
 package com.tonglukuaijian.commerce.vo;
 
+import javax.validation.constraints.NotNull;
+
 public class ProjectVo {
-	private Long id;
 	/**
 	 * 部门ID
 	 */
+	@NotNull(message = "未指定部门")
 	private Long departmentId;
 	/**
 	 * 部长ID
 	 */
+	@NotNull(message = "未指定部长")
 	private Long ministerUserId;
 	/**
 	 * 群总ID
 	 */
+	@NotNull(message = "未指定群总")
 	private Long groupUserId;
 	/**
 	 * 项目ID
 	 */
+	@NotNull(message = "请选择项目")
 	private String projectId;
 	/**
 	 * 项目名称
 	 */
+	@NotNull(message = "项目名称不能为空")
 	private String projectName;
 	/**
 	 * 项目负责人
 	 */
+	@NotNull(message = "未指定项目负责人")
 	private Long principalId;
 
 	public Long getDepartmentId() {
@@ -74,15 +81,5 @@ public class ProjectVo {
 	public void setPrincipalId(Long principalId) {
 		this.principalId = principalId;
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	
 
 }

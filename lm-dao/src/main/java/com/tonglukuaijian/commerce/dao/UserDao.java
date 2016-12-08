@@ -3,6 +3,7 @@ package com.tonglukuaijian.commerce.dao;
 import java.util.List;
 
 import com.tonglukuaijian.commerce.bean.User;
+import com.tonglukuaijian.commerce.dto.UserDto;
 
 /**
  * 用户
@@ -25,13 +26,6 @@ public interface UserDao {
 	public void update(User user);
 
 	/**
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	public User findById(Long userId);
-
-	/**
 	 * 用户名 密码获取用户
 	 * 
 	 * @param accountNumber
@@ -49,6 +43,35 @@ public interface UserDao {
 	 * @param roleId
 	 * @return
 	 */
-	public List<User> findByParams(String accountNumber, String name, Long departmentId, Long roleId, String phoneNum,int page,
-			int size);
+	public List<UserDto> findByParams(String accountNumber, String name, Long departmentId, Long roleId, String phoneNum,
+			int page, int size);
+
+	/**
+	 * 通过账号查询用户
+	 * 
+	 * @param accountNumber
+	 * @return
+	 */
+	User findByAccountNumber(String accountNumber);
+
+	/**
+	 * 删除用户
+	 * 
+	 * @param id
+	 */
+	void delete(Long id);
+
+	/**
+	 * 根据ID查询userdto
+	 * @param userId
+	 * @return
+	 */
+	UserDto findUserDtoById(Long userId);
+
+	/**
+	 * 根据id 查询user
+	 * @param userId
+	 * @return
+	 */
+	User findUserById(Long userId);
 }

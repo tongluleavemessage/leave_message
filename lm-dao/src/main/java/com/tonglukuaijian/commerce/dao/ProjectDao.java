@@ -23,11 +23,15 @@ public interface ProjectDao {
 	/**
 	 * 根据条件查询
 	 * 
-	 * @param departmentId 部门ID
-	 * @param projectId 项目ID
-	 * @param projectName 项目名称 
-	 * @param accountNumber 账号
-	 * @param name 
+	 * @param departmentId
+	 *            部门ID
+	 * @param projectId
+	 *            项目ID
+	 * @param projectName
+	 *            项目名称
+	 * @param accountNumber
+	 *            账号
+	 * @param name
 	 * @param phoneNum
 	 * @return
 	 */
@@ -58,4 +62,20 @@ public interface ProjectDao {
 	 */
 	List<Project> findProjectByUserRelation(Long departmentId, Long ministerId, Long groupId, Long principalId,
 			int page, int size);
+
+	/**
+	 * 通过ID 查询项目
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Project findById(Long id);
+
+	/**
+	 * 获取项目详情
+	 * 
+	 * @param id
+	 * @return
+	 */
+	ProjectDto findProjectDtoById(Long id);
 }

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,7 +26,7 @@ import com.tonglukuaijian.commerce.bean.LeaveMessageFollowRecord;
 import com.tonglukuaijian.commerce.dto.LeaveMessageAssignRecordDto;
 import com.tonglukuaijian.commerce.dto.LeaveMessageInfo;
 import com.tonglukuaijian.commerce.enums.LeaveMessageStatusEnum;
-import com.tonglukuaijian.commerce.exception.ServiceException;
+import com.tonglukuaijian.commerce.out.OutMessage;
 import com.tonglukuaijian.commerce.service.LeaveMessageService;
 import com.tonglukuaijian.commerce.util.CommonUtils;
 import com.tonglukuaijian.commerce.vo.LeaveMessageAssignVo;
@@ -43,48 +43,42 @@ public class LeaveMessageWebService {
 
 	@Path("/add")
 	@POST
-	public Map<String, Object> addLeaveMessage(@Valid LeaveMessageVo vo) {
-		leaveMessageService.addLeaveMessage(vo);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("message", "ok");
-		return map;
+	public OutMessage<?> addLeaveMessage(@Valid LeaveMessageVo vo) {
+		return leaveMessageService.addLeaveMessage(vo);
 	}
 
 	@Path("/get")
 	@GET
-	public Map<String, Object> getByParams(@Context HttpServletRequest request) {
+	public OutMessage<?> getByParams(@Context HttpServletRequest request) {
 		String projectId = request.getParameter("projectId");
 		String projectName = request.getParameter("projectName");
 		String principalName = request.getParameter("principalName");
 		String principalPhone = request.getParameter("principalPhone");
 		String customerName = request.getParameter("customerName");
-		Integer status = Integer.parseInt(request.getParameter("status"));
+		Integer status = LeaveMessageStatusEnum.ALL.value();
+		if (null != request.getParameter("status")) {
+			status = Integer.parseInt(request.getParameter("status"));
+		}
 		String createdTimeStart = request.getParameter("createdTimeStart");
 		String cratedTimeEnd = request.getParameter("createdTimeEnd");
-		Long loginUserId = null;
-		if (null != request.getAttribute("userId")) {
-			loginUserId = (Long) request.getAttribute("userId");
+		Long loginUserId = GetParams.getLoginUserId(request);
+		if (loginUserId == null) {
+			return OutMessage.errorMessage("用户未登录");
 		}
 		Map<String, Integer> paramMap = GetParams.getPage(request);
-		List<LeaveMessageInfo> list = leaveMessageService.getByParams(loginUserId, projectId, projectName,
-				principalName, principalPhone, customerName, status, createdTimeStart, cratedTimeEnd,
-				paramMap.get("page"), paramMap.get("size"));
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("data", list);
-		return map;
+		return leaveMessageService.getByParams(loginUserId, projectId, projectName, principalName, principalPhone,
+				customerName, status, createdTimeStart, cratedTimeEnd, paramMap.get("page"), paramMap.get("size"));
 	}
 
 	@GET
 	@Path("/info")
-	public Map<String, Object> getLeaveMessageInfo(@QueryParam("leaveMesageId") Long leaveMessageId,
-			@Context HttpSession session) {
-		if (leaveMessageId == null) {
-			throw new ServiceException("未指定留言");
+	public OutMessage<?> getLeaveMessageInfo(
+			@NotNull(message = "未指定留言") @QueryParam("leaveMessageId") Long leaveMessageId,
+			@Context HttpServletRequest request) {
+		Long loginUserId = GetParams.getLoginUserId(request);
+		if (loginUserId == null) {
+			return OutMessage.errorMessage("未登录");
 		}
-		if (null == session.getAttribute("userId")) {
-			throw new ServiceException("未登录");
-		}
-		Long loginUserId = (Long) session.getAttribute("userId");
 		LeaveMessageInfo info = leaveMessageService.getLeaveMessageInfo(loginUserId, leaveMessageId);
 		List<LeaveMessageAssignRecord> assignRecordList = leaveMessageService
 				.getLeaveMessageAssignRecord(leaveMessageId);
@@ -93,14 +87,13 @@ public class LeaveMessageWebService {
 		map.put("info", info);
 		map.put("assignRecord", assignRecordList);
 		map.put("followRecord", followRecordList);
-		return map;
+		return OutMessage.successMessage(map);
 
 	}
 
 	@Path("/get_assign")
 	@GET
-	public Map<String, Object> getLeaveMessageAssignRecord(@Context HttpServletRequest request) {
-		Map<String, Object> map = new HashMap<String, Object>();
+	public OutMessage<?> getLeaveMessageAssignRecord(@Context HttpServletRequest request) {
 		String projectId = request.getParameter("projectId");
 		String projectName = request.getParameter("projectName");
 		String projectPrincipal = request.getParameter("projectPrincipal");
@@ -116,35 +109,28 @@ public class LeaveMessageWebService {
 		List<LeaveMessageAssignRecordDto> list = leaveMessageService.getLeaveMessageAssignRecordByParams(projectId,
 				projectName, projectPrincipal, principalPhone, customerName, status, createdTimeStart, createdTimeEnd,
 				pageMap.get("page"), pageMap.get("size"));
-		map.put("data", list);
-		return map;
+		return OutMessage.successMessage(list);
 	}
 
 	@POST
 	@Path("/assign")
-	public Map<String, Object> leaveMessageAssign(LeaveMessageAssignVo vo, @Context HttpSession session) {
-		Map<String, Object> map = new HashMap<String, Object>();
-
-		if (null == session.getAttribute("userId")) {
-			throw new ServiceException("未登录");
+	public OutMessage<?> leaveMessageAssign(LeaveMessageAssignVo vo, @Context HttpServletRequest request) {
+		Long loginUserId = GetParams.getLoginUserId(request);
+		if (loginUserId == null) {
+			return OutMessage.errorMessage("用户未登录");
 		}
-		Long loginUserId = (Long) session.getAttribute("userId");
-		leaveMessageService.assignLeaveMessage(loginUserId, vo);
-		map.put("message", "ok");
-		return map;
+		return leaveMessageService.assignLeaveMessage(loginUserId, vo);
 	}
 
 	@GET
 	@Path("/assign_info")
-	public Map<String, Object> leaveMessageAssignLogSearch(
-			@QueryParam("leaveMessageAssignId") Long leaveMessageAssignId, @Context HttpSession session) {
-		if (leaveMessageAssignId == null) {
-			throw new ServiceException("未指定留言");
+	public OutMessage<?> leaveMessageAssignLogSearch(
+			@NotNull(message = "未指定留言") @QueryParam("leaveMessageAssignId") Long leaveMessageAssignId,
+			@Context HttpServletRequest request) {
+		Long loginUserId = GetParams.getLoginUserId(request);
+		if (loginUserId == null) {
+			return OutMessage.errorMessage("用户未登录");
 		}
-		if (null == session.getAttribute("userId")) {
-			throw new ServiceException("未登录");
-		}
-		Long loginUserId = (Long) session.getAttribute("userId");
 		LeaveMessageAssignRecord assignRecord = leaveMessageService
 				.getLeaveMessageAssignRecordById(leaveMessageAssignId);
 
@@ -154,30 +140,24 @@ public class LeaveMessageWebService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("info", info);
 		map.put("followRecord", followRecordList);
-		return map;
+		return OutMessage.successMessage(map);
 	}
 
 	@POST
 	@Path("/follow")
-	public Map<String, Object> leaveMessageFollow(LeaveMessageFollowVo vo) {
-		leaveMessageService.followLeaveMessage(vo);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("message", "ok");
-		return map;
+	public OutMessage<?> leaveMessageFollow(LeaveMessageFollowVo vo) {
+		return leaveMessageService.followLeaveMessage(vo);
 	}
 
 	@Path("/get_follow")
 	@GET
-	public Map<String, Object> leaveMessageFollowSearch(@QueryParam("leaveMessageId") Long leaveMessageId,
-			@Context HttpSession session) {
-		if (session.getAttribute("userId") == null) {
-			throw new ServiceException("未登录");
+	public OutMessage<?> leaveMessageFollowSearch(
+			@NotNull(message = "未指定留言") @QueryParam("leaveMessageId") Long leaveMessageId,
+			@Context HttpServletRequest request) {
+		Long loginUserId = GetParams.getLoginUserId(request);
+		if (loginUserId == null) {
+			return OutMessage.errorMessage("用户未登录");
 		}
-		Long loginUserId = (Long) session.getAttribute("userId");
-		if (leaveMessageId == null) {
-			throw new ServiceException("未指定留言");
-		}
-
 		LeaveMessageInfo info = leaveMessageService.getLeaveMessageInfo(loginUserId, leaveMessageId);
 		List<LeaveMessageAssignRecord> assignRecordList = leaveMessageService
 				.getLeaveMessageAssignRecord(leaveMessageId);
@@ -189,7 +169,7 @@ public class LeaveMessageWebService {
 		map.put("assignRecord", assignRecordList);
 		map.put("follow", follow);
 		map.put("followRecord", followRecordList);
-		return map;
+		return OutMessage.successMessage(map);
 	}
 
 	@Path("/test")

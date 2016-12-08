@@ -13,6 +13,7 @@ public class LeaveMessageInfo {
 	private String content;
 	private Integer status;
 	private Date createdTime;
+	private Long leaveMessagePrincipalUserId;
 
 	public Long getId() {
 		return id;
@@ -92,6 +93,14 @@ public class LeaveMessageInfo {
 
 	public void setCreatedTime(Date createdTime) {
 		this.createdTime = createdTime;
+	}
+
+	public Long getLeaveMessagePrincipalUserId() {
+		return leaveMessagePrincipalUserId;
+	}
+
+	public void setLeaveMessagePrincipalUserId(Long leaveMessagePrincipalUserId) {
+		this.leaveMessagePrincipalUserId = leaveMessagePrincipalUserId;
 	}
 
 }

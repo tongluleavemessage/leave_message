@@ -3,9 +3,11 @@ D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\se
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\enums\LeaveMessageStatusEnum.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\service\impl\ProjectUserServiceImpl.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\LeaveMessageFollowVo.java
+D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\UpdateRoleVo.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\service\ProjectService.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\UserVo.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\ProjectUserVo.java
+D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\UpdateUserVo.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\service\impl\ProjectServiceImpl.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\enums\UserUsingEnum.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\service\ProjectUserService.java
@@ -17,11 +19,15 @@ D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\se
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\ProjectVo.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\util\CommonUtils.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\LeaveMessageAssignVo.java
+D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\UpdateDepartmentVo.java
+D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\enums\CommonStatusEnum.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\service\RoleService.java
+D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\LoginVo.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\enums\RoleEnum.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\assembler\LeaveMessageAssembler.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\service\impl\DepartmentServiceImpl.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\DepartmentVo.java
+D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\UpdateProjectVo.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\service\impl\UserServiceImpl.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\exception\ServiceException.java
 D:\project\leave_message\lm-service\src\main\java\com\tonglukuaijian\commerce\vo\LeaveMessageVo.java

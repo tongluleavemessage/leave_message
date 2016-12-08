@@ -7,11 +7,13 @@ com\tonglukuaijian\commerce\dto\ProjectUserDto.class
 com\tonglukuaijian\commerce\dao\impl\LeaveMessageDaoImpl.class
 com\tonglukuaijian\commerce\dao\ProjectDao.class
 com\tonglukuaijian\commerce\mapper\DepartmentMapper.class
+com\tonglukuaijian\commerce\mapper\UserDtoMapper.class
 com\tonglukuaijian\commerce\dao\impl\ProjectUserDaoImpl.class
 com\tonglukuaijian\commerce\mapper\ProjectUserDtoMapper.class
 com\tonglukuaijian\commerce\dao\ProjectUserDao.class
 com\tonglukuaijian\commerce\mapper\LeaveMessageAssignRecordMapper.class
 com\tonglukuaijian\commerce\mapper\UserMapper.class
+com\tonglukuaijian\commerce\batch\ProjectUserBatch.class
 com\tonglukuaijian\commerce\bean\Project.class
 com\tonglukuaijian\commerce\mapper\LeaveMessageDtoMapper.class
 com\tonglukuaijian\commerce\bean\LeaveMessageAssignRecord.class
@@ -20,6 +22,7 @@ com\tonglukuaijian\commerce\mapper\LeaveMessageFollowRecordMapper.class
 com\tonglukuaijian\commerce\dao\LeaveMessageFollowDao.class
 com\tonglukuaijian\commerce\dao\DepartmentDao.class
 com\tonglukuaijian\commerce\mapper\LeaveMessageFollowMapper.class
+com\tonglukuaijian\commerce\dto\UserDto.class
 com\tonglukuaijian\commerce\mapper\RoleMapper.class
 com\tonglukuaijian\commerce\bean\LeaveMessage.class
 com\tonglukuaijian\commerce\mapper\LeaveMessageAssignRecordDtoMapper.class
@@ -35,6 +38,7 @@ com\tonglukuaijian\commerce\bean\Role.class
 com\tonglukuaijian\commerce\dto\LeaveMessageInfo.class
 com\tonglukuaijian\commerce\dto\ProjectDto.class
 com\tonglukuaijian\commerce\dao\impl\LeaveMessageFollowDaoImpl.class
+com\tonglukuaijian\commerce\OrmTemplate.class
 com\tonglukuaijian\commerce\dao\impl\UserDaoImpl.class
 com\tonglukuaijian\commerce\dao\impl\ProjectDaoImpl.class
 com\tonglukuaijian\commerce\dao\UserDao.class
