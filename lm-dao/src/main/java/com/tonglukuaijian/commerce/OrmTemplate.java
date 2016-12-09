@@ -16,4 +16,13 @@ public class OrmTemplate extends JdbcTemplate {
 		}
 		return results.iterator().next();
 	}
+
+	@Override
+	public <T> T queryForObject(String sql, RowMapper<T> rowMapper) throws DataAccessException {
+		List<T> results = query(sql, new RowMapperResultSetExtractor<T>(rowMapper, 1));
+		if (results.isEmpty() || results.size() == 0) {
+			return null;
+		}
+		return results.iterator().next();
+	}
 }

@@ -3,9 +3,9 @@ package com.tonglukuaijian.commerce.dao.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.tonglukuaijian.commerce.OrmTemplate;
 import com.tonglukuaijian.commerce.bean.LeaveMessageAssignRecord;
 import com.tonglukuaijian.commerce.dao.LeaveMessageAssignRecordDao;
 import com.tonglukuaijian.commerce.dto.LeaveMessageAssignRecordDto;
@@ -16,15 +16,16 @@ import com.tonglukuaijian.commerce.mapper.LeaveMessageAssignRecordMapper;
 public class LeaveMessageAssignRecordDaoImpl implements LeaveMessageAssignRecordDao {
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private OrmTemplate ormTemplate;
 
 	@Override
 	public void save(LeaveMessageAssignRecord po) {
-		jdbcTemplate.update(
-				"insert into T_LEAVE_MESSAGE_ASSIGN_RECORD (OPERATOR_USER_NAME,OPERATOR_ROLE_NAME,LEAVE_MESSAGE_ID,LEAVE_MESSAGE_STATUS,ASSIGN_USER_ACCOUNT_NUMBER,ASSIGN_USER_NAME,ASSIGN_USER_ROLE_NAME,CREATED_TIME) values(?,?,?,?,?,?,?,?)",
-				new Object[] { po.getOperatorUserName(), po.getOperatorRoleName(), po.getLeaveMessageId(),
-						po.getLeaveMessageStatus(), po.getAssignUserAccountNumber(), po.getAssignUserName(),
-						po.getAssignRoleName(), po.getCreatedTime() });
+		ormTemplate.update(
+				"insert into T_LEAVE_MESSAGE_ASSIGN_RECORD (OPERATOR_USER_NAME,OPERATOR_USER_PHONE,OPERATOR_ROLE_NAME,LEAVE_MESSAGE_ID,LEAVE_MESSAGE_STATUS,ASSIGN_USER_ACCOUNT_NUMBER,ASSIGN_USER_NAME,ASSIGN_USER_PHONE,ASSIGN_USER_ROLE_NAME,CREATED_TIME) values(?,?,?,?,?,?,?,?)",
+				new Object[] { po.getOperatorUserName(), po.getOperatorUserPhone(), po.getOperatorRoleName(),
+						po.getLeaveMessageId(), po.getLeaveMessageStatus(), po.getAssignUserAccountNumber(),
+						po.getAssignUserName(), po.getAssignUserPhoneNum(), po.getAssignRoleName(),
+						po.getCreatedTime() });
 	}
 
 	@Override
@@ -64,17 +65,17 @@ public class LeaveMessageAssignRecordDaoImpl implements LeaveMessageAssignRecord
 		}
 		sql += " order by ID desc";
 		if (page > 0 && size > 0) {
-			sql += " limit " + (page - 1)*size + " , " + size;
+			sql += " limit " + (page - 1) * size + " , " + size;
 		}
-		List<LeaveMessageAssignRecordDto> list = jdbcTemplate.query(sql, new LeaveMessageAssignRecordDtoMapper());
+		List<LeaveMessageAssignRecordDto> list = ormTemplate.query(sql, new LeaveMessageAssignRecordDtoMapper());
 		return list;
 	}
 
 	@Override
 	public List<LeaveMessageAssignRecord> findByLeaveMessageId(Long leaveMessageId) {
 		Object[] params = new Object[] { leaveMessageId };
-		List<LeaveMessageAssignRecord> list = jdbcTemplate.query(
-				"SELECT * FROM T_LEAVE_MESSAGE_ASSIGN_RECORD WHERE LEAVE_MESSAGE_ID=?",params,
+		List<LeaveMessageAssignRecord> list = ormTemplate.query(
+				"SELECT * FROM T_LEAVE_MESSAGE_ASSIGN_RECORD WHERE LEAVE_MESSAGE_ID=?", params,
 				new LeaveMessageAssignRecordMapper());
 		return list;
 	}
@@ -82,7 +83,7 @@ public class LeaveMessageAssignRecordDaoImpl implements LeaveMessageAssignRecord
 	@Override
 	public LeaveMessageAssignRecord findById(Long id) {
 		Object[] params = new Object[] { id };
-		LeaveMessageAssignRecord assignRecord = jdbcTemplate.queryForObject(
+		LeaveMessageAssignRecord assignRecord = ormTemplate.queryForObject(
 				"SELECT * FROM T_LEAVE_MESSAGE_ASSIGN_RECORD WHERE ID=?", params, new LeaveMessageAssignRecordMapper());
 		return assignRecord;
 	}

@@ -82,7 +82,7 @@ public interface LeaveMessageService {
 	 * 
 	 * @param vo
 	 */
-	OutMessage<?> followLeaveMessage(LeaveMessageFollowVo vo);
+	OutMessage<?> followLeaveMessage(Long loginUserId, LeaveMessageFollowVo vo);
 
 	/**
 	 * 获取留言跟进流水

@@ -3,9 +3,9 @@ package com.tonglukuaijian.commerce.dao.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.tonglukuaijian.commerce.OrmTemplate;
 import com.tonglukuaijian.commerce.batch.ProjectUserBatch;
 import com.tonglukuaijian.commerce.bean.ProjectUser;
 import com.tonglukuaijian.commerce.dao.ProjectUserDao;
@@ -16,17 +16,17 @@ import com.tonglukuaijian.commerce.mapper.ProjectUserDtoMapper;
 public class ProjectUserDaoImpl implements ProjectUserDao {
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	private OrmTemplate ormTemplate;
 
 	@Override
 	public void save(List<ProjectUser> projectUser) {
-		jdbcTemplate.batchUpdate("insert into T_PROJECT_USER (PROJECT_ID,USER_ID,CREATED_TIME) values(?,?,?)",
+		ormTemplate.batchUpdate("insert into T_PROJECT_USER (PROJECT_ID,USER_ID,CREATED_TIME) values(?,?,?)",
 				new ProjectUserBatch(projectUser));
 	}
 
 	@Override
 	public void delete(Long Id) {
-		jdbcTemplate.update("delete from T_PROJECT_USER where ID=?", Id);
+		ormTemplate.update("delete from T_PROJECT_USER where ID=?", Id);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class ProjectUserDaoImpl implements ProjectUserDao {
 		if (page > 0 && size > 0) {
 			sql += " and limit " + (page - 1) * size + "," + size;
 		}
-		List<ProjectUserDto> list = jdbcTemplate.query(sql, params, new ProjectUserDtoMapper());
+		List<ProjectUserDto> list = ormTemplate.query(sql, params, new ProjectUserDtoMapper());
 		return list;
 	}
 

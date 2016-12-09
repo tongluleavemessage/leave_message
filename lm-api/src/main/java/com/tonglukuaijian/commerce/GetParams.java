@@ -22,9 +22,11 @@ public class GetParams {
 	}
 
 	public static Long getLoginUserId(HttpServletRequest request) {
+		
 		if (request.getHeader("userid") == null) {
 			return null;
 		}
+		
 		return Long.parseLong(request.getHeader("userid"));
 	}
 }

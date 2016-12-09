@@ -29,7 +29,7 @@ public class LeaveMessageDaoImpl implements LeaveMessageDao {
 
 	@Override
 	public void updateLeaveMesage(LeaveMessage leaveMessage) {
-		ormTemplate.update("update T_LEAVE_MESSAGE set  MODIFY_TIME=?,PRINCIPAL_USER_ID,STATUS=? where ID=?",
+		ormTemplate.update("update T_LEAVE_MESSAGE set  MODIFY_TIME=?,PRINCIPAL_USER_ID=?,STATUS=? where ID=?",
 				new Object[] { leaveMessage.getModifyTime(), leaveMessage.getPrincipal(), leaveMessage.getStatus(),
 						leaveMessage.getId() });
 	}

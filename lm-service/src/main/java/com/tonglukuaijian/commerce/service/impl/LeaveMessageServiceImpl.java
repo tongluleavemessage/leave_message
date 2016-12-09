@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,16 +151,17 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 	@Override
 	public LeaveMessageInfo getLeaveMessageInfo(Long loginUserId, Long leaveMessageId) {
 		LeaveMessage leaveMessage = leaveMessageDao.findById(leaveMessageId);
-		User principalUser = userDao.findUserById(leaveMessage.getPrincipal());
+		User projectPrincipalUser = userDao.findUserById(leaveMessage.getBelongToUserId());
 		// 判断是否解密
 		Boolean decode = false;
 		if (loginUserId == leaveMessage.getPrincipal()) {
 			decode = true;
 		}
-		LeaveMessageInfo dto = LeaveMessageAssembler.wrapLeaveMessageToLeaveMessageDto(leaveMessage, principalUser,
-				decode);
+		LeaveMessageInfo dto = LeaveMessageAssembler.wrapLeaveMessageToLeaveMessageDto(leaveMessage,
+				projectPrincipalUser, decode);
+		// 客户手机号加密
 		if (!decode) {
-			dto.setPrincipalPhoneNum(encryption(dto.getCustomerPhone()));
+			dto.setCustomerPhone(encryption(dto.getCustomerPhone()));
 		}
 		return dto;
 	}
@@ -263,26 +266,38 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 	}
 
 	@Override
-	public OutMessage<?> followLeaveMessage(LeaveMessageFollowVo vo) {
+	public OutMessage<?> followLeaveMessage(Long loginUserId, LeaveMessageFollowVo vo) {
+		// 留言状态修改
+		LeaveMessage leaveMessage = leaveMessageDao.findById(vo.getLeaveMessageId());
+		if (null == leaveMessage) {
+			return OutMessage.errorMessage("留言不存在");
+		}
+		if (loginUserId != leaveMessage.getPrincipal()) {
+			return OutMessage.errorMessage("无权限跟进此留言");
+		}
+		leaveMessage.setModifyTime(new Date());
+		leaveMessage.setStatus(LeaveMessageStatusEnum.RETURN_VISIT.value());
+		leaveMessageDao.updateLeaveMesage(leaveMessage);
+
 		// 是否有跟进
 		LeaveMessageFollow po = leaveMessageFollowDao.findByleaveMessageId(vo.getLeaveMessageId());
 		if (null != po) {
-			po = wrapLeaveMessageFollow(vo);
+			po = wrapLeaveMessageFollow(vo, loginUserId);
 			leaveMessageFollowDao.update(po);
 		} else {
-			po = wrapLeaveMessageFollow(vo);
+			po = wrapLeaveMessageFollow(vo, loginUserId);
 			po.setCreatedTime(new Date());
 			leaveMessageFollowDao.save(po);
 		}
 		// 跟进日志
-		User operatorUser = userDao.findUserById(vo.getOperatorUserId());
+		User operatorUser = userDao.findUserById(loginUserId);
 		if (operatorUser == null) {
 			throw new ServiceException("用户不存在");
 		}
 		LeaveMessageFollowRecord followRecord = new LeaveMessageFollowRecord();
 		followRecord.setCreatedTime(new Date());
 		followRecord.setLeaveMessageId(vo.getLeaveMessageId());
-		followRecord.setOperatorUserId(vo.getOperatorUserId());
+		followRecord.setOperatorUserId(loginUserId);
 		followRecord.setOperatorUserName(operatorUser.getName());
 		followRecord.setRemark(vo.getRemark());
 		followRecord.setReturnTime(vo.getReturnTime());
@@ -291,11 +306,11 @@ public class LeaveMessageServiceImpl implements LeaveMessageService {
 		return OutMessage.successMessage();
 	}
 
-	private LeaveMessageFollow wrapLeaveMessageFollow(LeaveMessageFollowVo vo) {
+	private LeaveMessageFollow wrapLeaveMessageFollow(LeaveMessageFollowVo vo, Long operatorUserId) {
 		LeaveMessageFollow lmf = new LeaveMessageFollow();
 		lmf.setLeaveMessageId(vo.getLeaveMessageId());
 		lmf.setModifyTime(new Date());
-		lmf.setOperatorUserId(vo.getOperatorUserId());
+		lmf.setOperatorUserId(operatorUserId);
 		lmf.setRemark(vo.getRemark());
 		lmf.setReturnTime(vo.getReturnTime());
 		lmf.setStatus(vo.getStatus());

@@ -7,7 +7,7 @@ import com.tonglukuaijian.commerce.bean.User;
 import com.tonglukuaijian.commerce.dto.LeaveMessageInfo;
 
 public class LeaveMessageAssembler {
-	public static LeaveMessageInfo wrapLeaveMessageToLeaveMessageDto(LeaveMessage leaveMessage, User principalUser,
+	public static LeaveMessageInfo wrapLeaveMessageToLeaveMessageDto(LeaveMessage leaveMessage, User projectPrincipalUser,
 			Boolean decode) {
 		LeaveMessageInfo dto = new LeaveMessageInfo();
 		dto.setContent(leaveMessage.getContent());
@@ -19,9 +19,9 @@ public class LeaveMessageAssembler {
 			dto.setCustomerPhone(leaveMessage.getPhoneNum());
 		}
 		dto.setId(leaveMessage.getId());
-		if (principalUser != null) {
-			dto.setProjectPrincipalUserName(principalUser.getName());
-			dto.setPrincipalPhoneNum(principalUser.getPhoneNum());
+		if (projectPrincipalUser != null) {
+			dto.setProjectPrincipalUserName(projectPrincipalUser.getName());
+			dto.setPrincipalPhoneNum(projectPrincipalUser.getPhoneNum());
 		}
 		dto.setProjectId(leaveMessage.getProjectId());
 		dto.setProjectName(leaveMessage.getProjectName());

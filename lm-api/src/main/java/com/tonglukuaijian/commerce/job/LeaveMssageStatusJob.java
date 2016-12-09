@@ -12,7 +12,8 @@ public class LeaveMssageStatusJob {
 	Logger logger = LoggerFactory.getLogger("LeaveMssageStatusJob	");
 
 	@Autowired
-	private  LeaveMessageService leaveMessageService; 
+	private LeaveMessageService leaveMessageService;
+
 	public void execute() {
 		logger.info("-----------开始执行 留言状态修改------------");
 		leaveMessageService.leaveMessageJob(new Date());

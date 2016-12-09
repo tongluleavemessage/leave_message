@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tonglukuaijian.commerce.GetParams;
+import com.tonglukuaijian.commerce.ServiceException;
 import com.tonglukuaijian.commerce.bean.LeaveMessageAssignRecord;
 import com.tonglukuaijian.commerce.bean.LeaveMessageFollow;
 import com.tonglukuaijian.commerce.bean.LeaveMessageFollowRecord;
@@ -79,6 +80,7 @@ public class LeaveMessageWebService {
 		if (loginUserId == null) {
 			return OutMessage.errorMessage("未登录");
 		}
+
 		LeaveMessageInfo info = leaveMessageService.getLeaveMessageInfo(loginUserId, leaveMessageId);
 		List<LeaveMessageAssignRecord> assignRecordList = leaveMessageService
 				.getLeaveMessageAssignRecord(leaveMessageId);
@@ -145,8 +147,12 @@ public class LeaveMessageWebService {
 
 	@POST
 	@Path("/follow")
-	public OutMessage<?> leaveMessageFollow(LeaveMessageFollowVo vo) {
-		return leaveMessageService.followLeaveMessage(vo);
+	public OutMessage<?> leaveMessageFollow(@Valid LeaveMessageFollowVo vo, @Context HttpServletRequest request) {
+		Long loginUserId = GetParams.getLoginUserId(request);
+		if (loginUserId == null) {
+			return OutMessage.errorMessage("用户未登录");
+		}
+		return leaveMessageService.followLeaveMessage(loginUserId, vo);
 	}
 
 	@Path("/get_follow")
